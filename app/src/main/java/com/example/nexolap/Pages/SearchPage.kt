@@ -1,5 +1,6 @@
 package com.example.nexolap.Pages
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -23,16 +24,19 @@ fun SearchPage(modifier: Modifier = Modifier) {
             )
         }
     ) { innerPadding ->
-        SearchBar(
-            modifier = Modifier.padding(innerPadding),
-            query = "Search query",
-            onQueryChange = { /* Manejar el cambio de consulta */ },
-            onSearch = { /* Manejar la acción de búsqueda */ },
-            active = false,
-            onActiveChange = { /* Manejar el cambio de estado activo */ }
-        )
+        Column(modifier = Modifier.padding(innerPadding)) {
+            SearchBar(
+                query = "Search query",
+                onQueryChange = { /* Manejar el cambio de consulta */ },
+                onSearch = { /* Manejar la acción de búsqueda */ },
+                active = false,
+                onActiveChange = { /* Manejar el cambio de estado activo */ }
+            ){
 
-        ListVertical()
+            }
+            ListVertical()
+        }
+
     }
 
 }
