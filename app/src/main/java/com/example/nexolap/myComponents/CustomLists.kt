@@ -10,17 +10,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nexolap.R
 
 class ListData(var title: String)
 
 
 @Composable
-fun ListHorizontal() {
+fun ListVertical() {
     LazyColumn{
         item {
             Column {
                 for (i in 1..20) {
-                    TarjetaHorizontal()
+                    TarjetaHorizontal( cardData = CardData("Elemento $i" ,  R.drawable.ic_launcher_foreground) )
                 }
             }
 
@@ -29,13 +30,13 @@ fun ListHorizontal() {
     }
 
 @Composable
-fun ListVertical(listData: ListData) {
+fun ListHorizontal(listData: ListData) {
    Column(modifier = Modifier.padding(10.dp)) {
          Text(text = listData.title, modifier = Modifier.align(Alignment.CenterHorizontally))
          LazyRow() {
               item {
                   for (i in 1..10) {
-                      TarjetaVertical(cardData = CardData("Elemento $i"))
+                      TarjetaVertical(cardData = CardData("Elemento $i" ,  R.drawable.ic_launcher_foreground))
                   }
               }
          }
@@ -44,12 +45,12 @@ fun ListVertical(listData: ListData) {
 
 @Preview
 @Composable
-fun PreviewListHorizontal() {
-    ListHorizontal()
+fun PreviewListVertical() {
+    ListVertical()
 }
 
 @Preview
 @Composable
-fun PreviewListVertical() {
-    ListVertical(listData = ListData("Lista Vertical"))
+fun PreviewListHorizontal() {
+    ListHorizontal(listData = ListData("Lista Vertical"))
 }

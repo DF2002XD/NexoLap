@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.nexolap.R
 
-class CardData(var nombre: String)
+class CardData(var nombre: String, var imagen: Int)
 @Composable
 fun TarjetaVertical ( cardData: CardData) {
     Column {
         Image(
-            painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_launcher_foreground),
+            painter = androidx.compose.ui.res.painterResource(id = cardData.imagen),
             contentDescription = "Play Button"
         )
         Column(Modifier .align(Alignment.CenterHorizontally)) {
@@ -27,14 +27,14 @@ fun TarjetaVertical ( cardData: CardData) {
 }
 
 @Composable
-fun TarjetaHorizontal () {
+fun TarjetaHorizontal (cardData : CardData) {
     Row{
         Image(
-            painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_launcher_foreground),
+            painter = androidx.compose.ui.res.painterResource(id = cardData.imagen),
             contentDescription = "Play Button"
         )
         Column(Modifier .align(Alignment.CenterVertically)) {
-            Text(text = "Ejemplo Horizontal")
+            Text(text = cardData.nombre)
         }
     }
 }
@@ -42,11 +42,11 @@ fun TarjetaHorizontal () {
 @Preview
 @Composable
 fun TarjetaVerticalPreview() {
-    TarjetaVertical(cardData = CardData("Ejemplo"))
+    TarjetaVertical(cardData = CardData("Ejemplo vertical" , R.drawable.ic_launcher_foreground))
 }
 
 @Preview
 @Composable
 fun TarjetaHorizontalPreview() {
-    TarjetaHorizontal()
+    TarjetaHorizontal(cardData = CardData("Ejemplo horizontal" , R.drawable.ic_launcher_foreground))
 }
