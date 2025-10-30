@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NexoLapTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomePage(modifier = Modifier.padding(innerPadding))
+                    SearchPage(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

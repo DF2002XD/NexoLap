@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.magnifier
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.nexolap.R
 
@@ -16,13 +18,18 @@ class CardData(var nombre: String, var imagen: Int)
 fun TarjetaVertical ( cardData: CardData) {
     Column {
         Image(
-            painter = androidx.compose.ui.res.painterResource(id = cardData.imagen),
+            painter = painterResource(id = cardData.imagen),
             contentDescription = "Play Button"
         )
         Column(Modifier .align(Alignment.CenterHorizontally)) {
             Text(text = cardData.nombre)
         }
-
+        TextField(
+            value = String(),
+            label = { Text("Nuevo Producto") },
+            onValueChange = {String()},
+            singleLine = true
+        )
     }
 }
 
@@ -30,12 +37,13 @@ fun TarjetaVertical ( cardData: CardData) {
 fun TarjetaHorizontal (cardData : CardData) {
     Row{
         Image(
-            painter = androidx.compose.ui.res.painterResource(id = cardData.imagen),
+            painter = painterResource(id = cardData.imagen),
             contentDescription = "Play Button"
         )
         Column(Modifier .align(Alignment.CenterVertically)) {
             Text(text = cardData.nombre)
         }
+
     }
 }
 
