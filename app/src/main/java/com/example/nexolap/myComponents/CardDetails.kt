@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nexolap.R
 import com.example.nexolap.myComponents.SpecRow
@@ -45,4 +46,10 @@ fun DetailPage() {
             SpecRow("Batería", "6 horas")
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewDetailPage(){
+    DetailPage()
 }
