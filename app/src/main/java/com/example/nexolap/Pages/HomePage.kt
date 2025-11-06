@@ -10,7 +10,6 @@ import com.example.nexolap.myComponents.ButtomAppBarNav
 import com.example.nexolap.myComponents.ListData
 import com.example.nexolap.myComponents.ListHorizontal
 import com.example.nexolap.myComponents.TopAppTitle
-import com.example.nexolap.myComponents.TopAppTitle1
 
 @Composable
 fun HomePage(modifier: Modifier = Modifier) {

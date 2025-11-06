@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.nexolap.Pages.HomePage
+import com.example.nexolap.Pages.ProfilePage
 import com.example.nexolap.Pages.SearchPage
 import com.example.nexolap.ui.theme.NexoLapTheme
 
@@ -22,7 +23,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             NexoLapTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    //HomePage(modifier = Modifier.padding(innerPadding))
                     SearchPage(modifier = Modifier.padding(innerPadding))
+                    //ProfilePage(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

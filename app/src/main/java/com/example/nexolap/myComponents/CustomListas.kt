@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nexolap.Data.ordenadores
-import com.example.nexolap.R
-import java.time.temporal.TemporalQuery
 
 class ListData(var title: String)
 
@@ -26,12 +24,10 @@ fun ListVertical(searchQuery: String = "") {
     } else {
         productos.filter { it.nombre.contains(searchQuery, ignoreCase = true) }
     }
-    LazyColumn{
+    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally){
         items(productosFiltrados) { producto ->
             TarjetaHorizontal(cardData = producto)
         }
-
-
     }
     }
 
@@ -39,11 +35,11 @@ fun ListVertical(searchQuery: String = "") {
 @Composable
 fun ListHorizontal(listData: ListData) {
    Column(modifier = Modifier.padding(10.dp)) {
-         Text(text = listData.title, modifier = Modifier.align(Alignment.CenterHorizontally))
+         Text(text = listData.title,  )
          LazyRow() {
               item {
                   for (i in 1..10) {
-                      TarjetaVertical(cardData = CardData("Elemento $i" ,  R.drawable.ic_launcher_foreground))
+                      TarjetaVertical(cardData = ordenadores[i])
                   }
               }
          }

@@ -45,40 +45,6 @@ fun TopAppTitle(title : String) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppTitle1(title: String) {
-    val gradient = Brush.horizontalGradient(
-        colors = listOf(
-            Color(0xFFDFFBFF), // tono claro izquierda
-            Color(0xFFD2B3FF)  // tono morado derecha
-        )
-    )
-    val shape = RoundedCornerShape(bottomStart = 18.dp, bottomEnd = 18.dp)
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .background(brush = gradient, shape = shape)
-            .border(width = 2.dp, color = Color(0xFF8A4BFF), shape = shape)
-    ) {
-        TopAppBar(
-            title = {
-                Text(
-                    text = title,
-                    color = Color.Black,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
 @Composable
 fun ButtomAppBarNav(onHomeClick: () -> Unit, onSearchClick: () -> Unit, onProfileClick: () ->Unit ) {
     BottomAppBar {
@@ -111,12 +77,6 @@ fun ButtomAppBarNav(onHomeClick: () -> Unit, onSearchClick: () -> Unit, onProfil
 @Composable
 fun PreviewTopAppTitle() {
     TopAppTitle(title = "NexoLap")
-}
-
-@Preview
-@Composable
-fun PreviewTopAppTitle1() {
-    TopAppTitle1(title = "NexoLap")
 }
 
 @Preview
