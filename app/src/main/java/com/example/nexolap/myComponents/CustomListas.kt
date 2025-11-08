@@ -16,6 +16,12 @@ import com.example.nexolap.Data.ordenadores
 class ListData(var title: String)
 
 
+/**
+ * Una función Composable que muestra una lista vertical de productos.
+ * La lista se puede filtrar en función de una consulta de búsqueda.
+ *
+ * @param searchQuery Una cadena de texto utilizada para filtrar la lista de productos por nombre. Si la consulta está vacía, se muestran todos los productos.
+ */
 @Composable
 fun ListVertical(searchQuery: String = "") {
     val productos = ordenadores
@@ -26,12 +32,18 @@ fun ListVertical(searchQuery: String = "") {
     }
     LazyColumn(horizontalAlignment = Alignment.CenterHorizontally){
         items(productosFiltrados) { producto ->
-            TarjetaHorizontal(cardData = producto)
+            TarjetaHorizontal(cardData = producto, onClick = {})
         }
     }
-    }
+}
 
 
+/**
+ * Un Composable que muestra una lista horizontal de tarjetas de productos.
+ * La lista muestra los primeros 10 productos de una fuente de datos predefinida.
+ *
+ * @param listData Un objeto [ListData] que contiene el título a mostrar encima de la lista horizontal.
+ */
 @Composable
 fun ListHorizontal(listData: ListData) {
    Column(modifier = Modifier.padding(10.dp)) {
@@ -39,7 +51,7 @@ fun ListHorizontal(listData: ListData) {
          LazyRow() {
               item {
                   for (i in 1..10) {
-                      TarjetaVertical(cardData = ordenadores[i])
+                      TarjetaVertical(cardData = ordenadores[i], onClick = {})
                   }
               }
          }

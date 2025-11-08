@@ -34,6 +34,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * Un composable personalizado para mostrar una barra de aplicación superior con un título centrado.
+ * Utiliza `TopAppBar` de Material3 para proporcionar una apariencia consistente.
+ *
+ * @param title La cadena de texto que se mostrará como el título centrado de la barra de aplicación.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppTitle(title : String) {
@@ -45,14 +51,23 @@ fun TopAppTitle(title : String) {
     )
 }
 
+/**
+ * Un composable para una barra de navegación inferior personalizada.
+ * Muestra tres iconos (Inicio, Búsqueda y Perfil) distribuidos equitativamente.
+ * Cada icono es un botón que ejecuta una acción específica al ser presionado.
+ *
+ * @param onHomeClick La función lambda que se ejecutará cuando se haga clic en el icono de Inicio.
+ * @param onSearchClick La función lambda que se ejecutará cuando se haga clic en el icono de Búsqueda.
+ * @param onProfileClick La función lambda que se ejecutará cuando se haga clic en el icono de Perfil.
+ */
 @Composable
 fun ButtomAppBarNav(onHomeClick: () -> Unit, onSearchClick: () -> Unit, onProfileClick: () ->Unit ) {
-    BottomAppBar {
+    BottomAppBar(
+    ){
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             IconButton(onClick = onHomeClick , modifier = Modifier.weight(1.5f)) {
                 Icon(Icons.Default.Home, contentDescription = "Home", modifier = Modifier

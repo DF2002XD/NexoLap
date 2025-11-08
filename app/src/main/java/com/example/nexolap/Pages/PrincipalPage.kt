@@ -11,8 +11,19 @@ import com.example.nexolap.myComponents.ListData
 import com.example.nexolap.myComponents.ListHorizontal
 import com.example.nexolap.myComponents.TopAppTitle
 
+/**
+ * Una función Composable que representa la pantalla principal de la aplicación.
+ *
+ * Esta pantalla está estructurada con un diseño [Scaffold], que incluye una barra
+ * de aplicaciones superior (top app bar), una barra de navegación inferior (bottom navigation bar)
+ * y el área de contenido principal. El contenido principal consiste en una lista vertical
+ * ([LazyColumn]) de listas de desplazamiento horizontal ([ListHorizontal]) que muestran
+ * diferentes categorías de elementos como "Más Vendidos", "Populares" y "Nuevos Lanzamientos".
+ *
+ * @param modifier Un [Modifier] que se aplica al Composable raíz de esta pantalla.
+ */
 @Composable
-fun HomePage(modifier: Modifier = Modifier) {
+fun PrincipalPage(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             TopAppTitle(
@@ -46,5 +57,5 @@ fun HomePage(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewHomePage() {
-    HomePage()
+    PrincipalPage()
 }

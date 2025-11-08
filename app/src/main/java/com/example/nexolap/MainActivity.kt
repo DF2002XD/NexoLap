@@ -7,13 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.nexolap.Pages.HomePage
-import com.example.nexolap.Pages.ProfilePage
-import com.example.nexolap.Pages.SearchPage
+import com.example.nexolap.Pages.InicioPage
+import com.example.nexolap.Pages.PrincipalPage
+import com.example.nexolap.Pages.PerfilPage
+import com.example.nexolap.Pages.BusquedaPage
+import com.example.nexolap.Pages.RegistroPage
 import com.example.nexolap.ui.theme.NexoLapTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,9 +23,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             NexoLapTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    //HomePage(modifier = Modifier.padding(innerPadding))
-                    SearchPage(modifier = Modifier.padding(innerPadding))
-                    //ProfilePage(modifier = Modifier.padding(innerPadding))
+//                    InicioPage(modifier = Modifier.padding(innerPadding))
+                    RegistroPage(modifier = Modifier.padding(innerPadding))
+                    //PrincipalPage(modifier = Modifier.padding(innerPadding))
+//                    BusquedaPage(modifier = Modifier.padding(innerPadding))
+                    //PerfilPage(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
