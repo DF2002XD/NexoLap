@@ -7,43 +7,48 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nexolap.Data.ListaData
 import com.example.nexolap.Data.ordenadores
-import com.example.nexolap.R
-import java.time.temporal.TemporalQuery
-
-class ListData(var title: String)
+import kotlin.collections.filter
 
 
 @Composable
 fun ListVertical(searchQuery: String = "") {
     val productos = ordenadores
-    val productosFiltrados = if (searchQuery.isEmpty()) {
-        productos
-    } else {
-        productos.filter { it.nombre.contains(searchQuery, ignoreCase = true) }
-    }
-    LazyColumn{
-        items(productosFiltrados) { producto ->
-            TarjetaHorizontal(cardData = producto)
+
+    // --- INICIO DE LA CORRECCIÓN ---
+    val productosFiltrados = remember(searchQuery, productos) {
+        if (searchQuery.isBlank()) {
+            productos
+        } else {
+            productos.filter {
+                it.nombre.contains(searchQuery, ignoreCase = true)
+            }
         }
-
-
     }
+
+    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally){
+        items(productosFiltrados) { producto ->
+            TarjetaHorizontal(ordenador = producto, onClick = {})
+        }
     }
+}
+
 
 
 @Composable
-fun ListHorizontal(listData: ListData) {
+fun ListHorizontal(listaData: ListaData) {
    Column(modifier = Modifier.padding(10.dp)) {
-         Text(text = listData.title, modifier = Modifier.align(Alignment.CenterHorizontally))
+         Text(text = listaData.title)
          LazyRow() {
               item {
                   for (i in 1..10) {
-                      TarjetaVertical(cardData = CardData("Elemento $i" ,  R.drawable.ic_launcher_foreground))
+                      TarjetaVertical(ordenador = ordenadores[i], onClick = {})
                   }
               }
          }
@@ -59,5 +64,5 @@ fun PreviewListVertical() {
 @Preview
 @Composable
 fun PreviewListHorizontal() {
-    ListHorizontal(listData = ListData("Lista Vertical"))
+    ListHorizontal(listaData = ListaData("Lista Vertical"))
 }

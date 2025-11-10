@@ -1,16 +1,11 @@
 package com.example.nexolap.myComponents
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
@@ -19,21 +14,22 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * Un composable personalizado para mostrar una barra de aplicación superior con un título centrado.
+ * Utiliza `TopAppBar` de Material3 para proporcionar una apariencia consistente.
+ *
+ * @param title La cadena de texto que se mostrará como el título centrado de la barra de aplicación.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppTitle(title : String) {
@@ -45,48 +41,23 @@ fun TopAppTitle(title : String) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppTitle1(title: String) {
-    val gradient = Brush.horizontalGradient(
-        colors = listOf(
-            Color(0xFFDFFBFF), // tono claro izquierda
-            Color(0xFFD2B3FF)  // tono morado derecha
-        )
-    )
-    val shape = RoundedCornerShape(bottomStart = 18.dp, bottomEnd = 18.dp)
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .background(brush = gradient, shape = shape)
-            .border(width = 2.dp, color = Color(0xFF8A4BFF), shape = shape)
-    ) {
-        TopAppBar(
-            title = {
-                Text(
-                    text = title,
-                    color = Color.Black,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
+/**
+ * Un composable para una barra de navegación inferior personalizada.
+ * Muestra tres iconos (Inicio, Búsqueda y Perfil) distribuidos equitativamente.
+ * Cada icono es un botón que ejecuta una acción específica al ser presionado.
+ *
+ * @param onHomeClick La función lambda que se ejecutará cuando se haga clic en el icono de Inicio.
+ * @param onSearchClick La función lambda que se ejecutará cuando se haga clic en el icono de Búsqueda.
+ * @param onProfileClick La función lambda que se ejecutará cuando se haga clic en el icono de Perfil.
+ */
 @Composable
 fun ButtomAppBarNav(onHomeClick: () -> Unit, onSearchClick: () -> Unit, onProfileClick: () ->Unit ) {
-    BottomAppBar {
+    BottomAppBar(
+    ){
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             IconButton(onClick = onHomeClick , modifier = Modifier.weight(1.5f)) {
                 Icon(Icons.Default.Home, contentDescription = "Home", modifier = Modifier
@@ -111,12 +82,6 @@ fun ButtomAppBarNav(onHomeClick: () -> Unit, onSearchClick: () -> Unit, onProfil
 @Composable
 fun PreviewTopAppTitle() {
     TopAppTitle(title = "NexoLap")
-}
-
-@Preview
-@Composable
-fun PreviewTopAppTitle1() {
-    TopAppTitle1(title = "NexoLap")
 }
 
 @Preview
