@@ -1,8 +1,6 @@
 package com.example.nexolap.myComponents
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -19,11 +17,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.R
 
-
+/**
+ * Un campo de texto personalizable para introducir contraseñas.
+ *
+ * Este componente incluye una etiqueta, un campo de texto y un icono para alternar la visibilidad de la contraseña.
+ * El estado de visibilidad de la contraseña se gestiona internamente.
+ *
+ * @param label El texto que se mostrará como etiqueta encima del campo de texto.
+ * @param valor El valor actual del campo de contraseña.
+ * @param onValorCambiado El callback que se invoca cuando el valor del campo de texto cambia.
+ * @param modifier El [Modifier] que se aplicará al componente `TextField`. Por defecto es un [Modifier] vacío.
+ * @param esError Indica si el campo de texto debe mostrarse en estado de error. Por defecto es `false`.
+ */
 @Composable
 fun CampoContrasenha(
     label: String,
@@ -51,4 +61,10 @@ fun CampoContrasenha(
             }
         }
     )
+}
+
+@Preview
+@Composable
+fun CampoContrasenhaPreview() {
+    CampoContrasenha(label = "Contraseña", valor = "", onValorCambiado = {})
 }

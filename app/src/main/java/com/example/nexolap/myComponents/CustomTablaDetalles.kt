@@ -19,7 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.Data.Especificacion
 
-
+/**
+ * Un composable que muestra una tabla de especificaciones de producto.
+ * La tabla consta de dos columnas: "Especificación" y "Detalle".
+ * Incluye una fila de cabecera y colorea las filas de datos de forma alterna para mejorar la legibilidad.
+ *
+ * @param especificaciones Una lista de objetos [Especificacion] que contienen los datos a mostrar.
+ *                         Cada objeto representa una fila en la tabla.
+ */
 @Composable
 fun TablaEspecificaciones(especificaciones: List<Especificacion>) {
     Column(
@@ -36,7 +43,6 @@ fun TablaEspecificaciones(especificaciones: List<Especificacion>) {
             TableCell(text = "Detalle", weight = 0.6f, isHeader = true)
         }
         HorizontalDivider()
-
         // --- Filas de Datos ---
         especificaciones.forEachIndexed { index, especificacion ->
             val backgroundColor = if (index % 2 == 0) {
@@ -46,7 +52,6 @@ fun TablaEspecificaciones(especificaciones: List<Especificacion>) {
                 // Sin fondo para filas impares
                 Color.Transparent
             }
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -62,6 +67,16 @@ fun TablaEspecificaciones(especificaciones: List<Especificacion>) {
     }
 }
 
+/**
+ * Un composable que representa una única celda dentro de una fila de una tabla.
+ * Muestra texto y su apariencia se puede personalizar para celdas de encabezado o de datos.
+ * Este composable debe usarse dentro de un [RowScope], normalmente como hijo de un [Row].
+ *
+ * @param text El contenido de texto que se mostrará en la celda.
+ * @param weight El ancho relativo de la celda dentro de la fila. Determina cuánto espacio horizontal ocupa la celda.
+ * @param isHeader Una bandera booleana para indicar si esta celda es parte del encabezado de la tabla.
+ *                 Si es verdadero, el texto se mostrará en negrita y con un color diferente para distinguirlo. El valor por defecto es falso.
+ */
 @Composable
 fun RowScope.TableCell(
     text: String,

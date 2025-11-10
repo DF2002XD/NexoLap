@@ -2,7 +2,11 @@ package com.example.nexolap.Data
 
 import com.example.nexolap.R
 
-
+/**
+ * Una lista predefinida de objetos [Ordenador] que sirve como fuente de datos de la aplicación.
+ * Esta lista contiene varios modelos de portátiles de diferentes fabricantes como Apple, Dell, HP, etc.,
+ * con algunos modelos que tienen especificaciones detalladas y otros que actúan como marcadores de posición.
+ */
 val ordenadores = listOf(
     // Apple
     Ordenador(
