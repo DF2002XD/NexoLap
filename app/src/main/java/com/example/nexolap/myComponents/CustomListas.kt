@@ -16,7 +16,15 @@ import com.example.nexolap.Data.ListaData
 import com.example.nexolap.Data.ordenadores
 import kotlin.collections.filter
 
-
+/**
+ * Un composable que muestra una lista vertical de productos (ordenadores).
+ * La lista puede ser filtrada mediante una consulta de búsqueda.
+ * Utiliza un `LazyColumn` para mostrar eficientemente los elementos `TarjetaHorizontal`.
+ *
+ * @param searchQuery Una cadena de texto utilizada para filtrar la lista de productos.
+ *                    La búsqueda no distingue entre mayúsculas y minúsculas y se realiza
+ *                    en el nombre del producto. Si está en blanco, se muestran todos los productos.
+ */
 @Composable
 fun ListVertical(searchQuery: String = "") {
     val productos = ordenadores
@@ -39,8 +47,13 @@ fun ListVertical(searchQuery: String = "") {
     }
 }
 
-
-
+/**
+ * Un composable que muestra una lista horizontal de elementos.
+ * Consiste en un título y una `LazyRow` que contiene varias tarjetas `TarjetaVertical`.
+ *
+ * @param listaData Un objeto de tipo [ListaData] que contiene los datos para la lista,
+ *                  incluyendo el título que se mostrará encima de la fila horizontal.
+ */
 @Composable
 fun ListHorizontal(listaData: ListaData) {
    Column(modifier = Modifier.padding(10.dp)) {

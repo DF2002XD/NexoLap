@@ -21,12 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.Data.ordenadores
 
-
+/**
+ * Composable que muestra la pantalla de detalles de un ordenador específico.
+ * Busca el ordenador por su ID en una lista predefinida y muestra su imagen,
+ * nombre y una tabla con sus especificaciones. Si el ordenador no se encuentra,
+ * muestra un mensaje indicándolo.
+ *
+ * @param ordenadorId El ID del ordenador del cual se mostrarán los detalles.
+ */
 @Composable
 fun Detalles(ordenadorId: Int) {
     val ordenador = ordenadores.find { it.id == ordenadorId }
-
-    // PASO 3: Muestra un mensaje si el ordenador no se encuentra.
+    // Muestra un mensaje si el ordenador no se encuentra.
     if (ordenador == null) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -37,7 +43,6 @@ fun Detalles(ordenadorId: Int) {
         }
         return // Detiene la ejecución si no hay ordenador
     }
-
     // Si el ordenador se encuentra, muestra sus detalles.
     Column(
         modifier = Modifier
@@ -67,10 +72,6 @@ fun Detalles(ordenadorId: Int) {
         TablaEspecificaciones(especificaciones = ordenador.especificaciones)
     }
 }
-
-
-
-
 
 @Preview
 @Composable
