@@ -13,13 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.Data.Especificacion
-import com.example.nexolap.R
 
 /**
  * Un composable que muestra una tabla de especificaciones de producto.
@@ -41,8 +39,8 @@ fun TablaEspecificaciones(especificaciones: List<Especificacion>) {
                 .padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TableCell(text = stringResource(R.string.especificaciones), weight = 0.4f, isHeader = true)
-            TableCell(text = stringResource(R.string.detalles), weight = 0.6f, isHeader = true)
+            TableCell(text = "Especificación", weight = 0.4f, isHeader = true)
+            TableCell(text = "Detalle", weight = 0.6f, isHeader = true)
         }
         HorizontalDivider()
         // --- Filas de Datos ---

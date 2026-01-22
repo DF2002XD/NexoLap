@@ -1,6 +1,5 @@
 package com.example.nexolap.Data
 
-import androidx.compose.ui.res.stringResource
 import com.example.nexolap.R
 
 /**
@@ -11,19 +10,18 @@ import com.example.nexolap.R
 val ordenadores = listOf(
     // Apple
     Ordenador(
-        id= "1",
+        id = 1,
         nombre = "Apple MacBook Air 13\" (M2)",
-        imagenPrincipal =,
-        especificaciones = listOf()
-//        especificaciones = listOf(
-//            Especificacion("Procesador", "Chip M2 de Apple con CPU de 8 núcleos y GPU de 8 núcleos"),
-//            Especificacion("Memoria RAM", "8 GB de memoria unificada (ampliable a 16 GB o 24 GB)"),
-//            Especificacion("Almacenamiento", "256 GB SSD (ampliable a 512 GB, 1 TB o 2 TB)"),
-//            Especificacion("Pantalla", "13,6 pulgadas Liquid Retina con True Tone, 500 nits"),
-//            Especificacion("Batería", "Hasta 18 horas de reproducción de vídeo"),
-//            Especificacion("Puertos", "Puerto de carga MagSafe 3, dos puertos Thunderbolt/USB 4"),
-//            Especificacion("Peso", "1,24 kg")
-//        )
+        imagenPrincipal = R.drawable.macbook_air_m2,
+        especificaciones = listOf(
+            Especificacion("Procesador", "Chip M2 de Apple con CPU de 8 núcleos y GPU de 8 núcleos"),
+            Especificacion("Memoria RAM", "8 GB de memoria unificada (ampliable a 16 GB o 24 GB)"),
+            Especificacion("Almacenamiento", "256 GB SSD (ampliable a 512 GB, 1 TB o 2 TB)"),
+            Especificacion("Pantalla", "13,6 pulgadas Liquid Retina con True Tone, 500 nits"),
+            Especificacion("Batería", "Hasta 18 horas de reproducción de vídeo"),
+            Especificacion("Puertos", "Puerto de carga MagSafe 3, dos puertos Thunderbolt/USB 4"),
+            Especificacion("Peso", "1,24 kg")
+        )
     ),
     Ordenador(
         id = 2,
@@ -31,7 +29,6 @@ val ordenadores = listOf(
         imagenPrincipal = R.drawable.macbook_pro_14,
         especificaciones = listOf(
             Especificacion("Procesador", "Chip M3 Pro de Apple con CPU de hasta 12 núcleos y GPU de hasta 18 núcleos"),
-
             Especificacion("Memoria RAM", "18 GB de memoria unificada (ampliable a 36 GB)"),
             Especificacion("Almacenamiento", "512 GB SSD (ampliable a 1 TB, 2 TB o 4 TB)"),
             Especificacion("Pantalla", "14,2 pulgadas Liquid Retina XDR, ProMotion hasta 120 Hz"),
