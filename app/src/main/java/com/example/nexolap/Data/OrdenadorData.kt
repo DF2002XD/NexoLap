@@ -11,8 +11,8 @@ import android.R
  * @property especificaciones Una lista de objetos [Especificacion] que detallan las características técnicas del ordenador.
  */
 data class Ordenador(
-    val id: Int,
-    val imagenPrincipal: Int,
+    val id: String,
+    val imagenPrincipal: String,
     val nombre: String,
     val especificaciones: List<Especificacion>
 )
