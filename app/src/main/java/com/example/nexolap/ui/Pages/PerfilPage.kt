@@ -1,4 +1,4 @@
-package com.example.nexolap.Pages
+package com.example.nexolap.ui.Pages
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.nexolap.myComponents.ButtomAppBarNav
 import com.example.nexolap.myComponents.Perfil
 
 /**
@@ -20,7 +21,15 @@ import com.example.nexolap.myComponents.Perfil
  */
 @Composable
 fun PerfilPage(modifier: Modifier = Modifier){
-    Scaffold{innerPadding ->
+    Scaffold(
+        bottomBar = {
+            ButtomAppBarNav(
+                onHomeClick = { /* Acción al hacer clic en el ícono de inicio */ },
+                onSearchClick = { /* Acción al hacer clic en el ícono de búsqueda */ },
+                onProfileClick = { /* Acción al hacer clic en el ícono de cuenta */ },
+            )
+        }
+    ){innerPadding ->
         Column(modifier = Modifier.padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally){
             Perfil()
         }
