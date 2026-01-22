@@ -15,11 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.Data.ordenadores
+import com.example.nexolap.R
 
 /**
  * Composable que muestra la pantalla de detalles de un ordenador específico.
@@ -39,7 +41,7 @@ fun Detalles(ordenadorId: Int) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Producto no encontrado", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(text = stringResource(R.string.ordenador_no_encontrado), fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
         return // Detiene la ejecución si no hay ordenador
     }

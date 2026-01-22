@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">NexoLap</string>
+    <string name="inicio_de_sesion">Inicio de Sesión</string>
+    <string name="inicio_sesion">Inicio Sesión</string>
+    <string name="crear_nueva_cuenta">Crear nueva Cuenta</string>
+    <string name="crear_cuenta">Crear Cuenta</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="correo">CORREO</string>
+    <string name="contrasenha">CONTRASEÑA</string>
+    <string name="repita_contrasenha">REPITE CONTRASEÑA</string>
+    <string name="contrasenhas_no_coinciden">Las contraseñas no coinciden</string>
+    <string name="nombre">NOMBRE</string>
+    <string name="mas_vendidos">Más Vendidos</string>
+    <string name="populares">Populares</string>
+    <string name="nuevos_lanzamientos">Nuevos Lanzamientos</string>
+    <string name="ya_esta_registrado">¿Ya estás registrado? Inicia sesión </string>
+    <string name="login_aqui">aquí</string>
+    <string name="ordenador_no_encontrado">Producto no encontrado</string>
+    <string name="especificaciones">Especificación</string>
+    <string name="detalles">Detalle</string>
+
 </resources>

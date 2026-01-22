@@ -1,12 +1,14 @@
-package com.example.nexolap.Pages
+package com.example.nexolap.ui.Pages
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.nexolap.Data.ListaData
+import com.example.nexolap.R
 import com.example.nexolap.myComponents.ButtomAppBarNav
 import com.example.nexolap.myComponents.ListHorizontal
 import com.example.nexolap.myComponents.TopAppTitle
@@ -27,7 +29,7 @@ fun PrincipalPage(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             TopAppTitle(
-                title = "NexoLap"
+                title = stringResource(id = R.string.app_name)
             )
         },
         bottomBar = {
@@ -41,13 +43,13 @@ fun PrincipalPage(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             item {
-                ListHorizontal(listaData = ListaData("Más Vendidos"))
+                ListHorizontal(listaData = ListaData(stringResource(id = R.string.mas_vendidos)))
             }
             item {
-                ListHorizontal(listaData = ListaData("Populares"))
+                ListHorizontal(listaData = ListaData(stringResource(id = R.string.populares)))
             }
             item {
-                ListHorizontal(listaData = ListaData("Nuevos Lanzamientos"))
+                ListHorizontal(listaData = ListaData(stringResource(id = R.string.nuevos_lanzamientos)))
             }
         }
     }
