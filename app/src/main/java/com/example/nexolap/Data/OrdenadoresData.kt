@@ -29,7 +29,6 @@ val ordenadores = listOf(
         imagenPrincipal = R.drawable.macbook_pro_14,
         especificaciones = listOf(
             Especificacion("Procesador", "Chip M3 Pro de Apple con CPU de hasta 12 núcleos y GPU de hasta 18 núcleos"),
-
             Especificacion("Memoria RAM", "18 GB de memoria unificada (ampliable a 36 GB)"),
             Especificacion("Almacenamiento", "512 GB SSD (ampliable a 1 TB, 2 TB o 4 TB)"),
             Especificacion("Pantalla", "14,2 pulgadas Liquid Retina XDR, ProMotion hasta 120 Hz"),

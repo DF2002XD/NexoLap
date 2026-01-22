@@ -1,4 +1,4 @@
-package com.example.nexolap.ui.Pages
+package com.example.nexolap.Pages
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

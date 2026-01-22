@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.LinkAnnotation
@@ -31,9 +30,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.Data.UsuarioData
-import com.example.nexolap.R
-
-
 
 /**
  * Un Composable que muestra la pantalla de inicio de sesión.
@@ -63,18 +59,15 @@ fun InicioSesion (
     ) {
         Spacer(modifier = Modifier.height(150.dp))
 
-        Text(text = stringResource(R.string.inicio_de_sesion), fontSize = 40.sp, modifier = Modifier.padding(bottom = 60.dp))
-
+        Text(text = "Inicio de Sesión", fontSize = 40.sp, modifier = Modifier.padding(bottom = 60.dp))
 
         Spacer(modifier = Modifier.height(100.dp))
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally // Alinea el texto a la izquierda
         ) {
-            Text(text = stringResource(R.string.correo), fontSize = 25.sp,)
+            Text(text = "Correo", fontSize = 25.sp,)
             TextField(
                 value = correo,
                 onValueChange = { correo = it },
@@ -90,7 +83,7 @@ fun InicioSesion (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CampoContrasenha(
-                label = stringResource(R.string.contrasenha),
+                label = "Contraseña",
                 valor = contrasenha,
                 onValorCambiado = { contrasenha = it }
             )
@@ -103,7 +96,7 @@ fun InicioSesion (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Boton(
-                nombre = stringResource(R.string.inicio_sesion),
+                nombre = "Iniciar Sesión",
                 onClick = { onLoginClicked(correo, contrasenha) },
                 enabled = correo.isNotBlank() && contrasenha.isNotBlank()
             )
@@ -111,7 +104,7 @@ fun InicioSesion (
             Spacer(modifier = Modifier.height(26.dp))
 
             Boton(
-                nombre = stringResource(R.string.registrarse),
+                nombre = "Registrarse",
                 onClick = onNavigateToRegister,
                 enabled = true
             )
@@ -153,10 +146,9 @@ fun Registro(
             modifier = Modifier.padding(top = 80.dp, bottom = 40.dp), // Aumentado espacio inferior
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.crear_nueva_cuenta), fontSize = 40.sp, textAlign = TextAlign.Center)
+            Text(text = "Crea nueva cuenta", fontSize = 40.sp, textAlign = TextAlign.Center)
             val annotatedText = buildAnnotatedString {
-                append(stringResource(R.string.ya_esta_registrado))
-                append(" ")
+                append("¿Ya estás registrado? Inicia sesión ")
                 withLink(
                     LinkAnnotation.Clickable(
                         tag = "LOGIN",
@@ -164,7 +156,7 @@ fun Registro(
                     )
                 ) {
                     withStyle(style = SpanStyle(color = Color.Blue)) {
-                        append(stringResource(R.string.login_aqui))
+                        append("aquí")
                     }
                 }
             }
@@ -172,12 +164,10 @@ fun Registro(
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 25.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.nombre), modifier = Modifier.padding(bottom = 10.dp), fontSize = 25.sp)
+            Text(text = "NOMBRE", modifier = Modifier.padding(bottom = 10.dp), fontSize = 25.sp)
             TextField(
                 value = datosUsuario.UsuarioNombre,
                 onValueChange = { nuevoNombre ->
@@ -189,12 +179,10 @@ fun Registro(
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 25.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.correo), modifier = Modifier.padding(bottom = 10.dp), fontSize = 25.sp)
+            Text(text = "CORREO", modifier = Modifier.padding(bottom = 10.dp), fontSize = 25.sp)
             TextField(
                 value = datosUsuario.UsuarioCorreo,
                 onValueChange = { nuevoCorreo ->
@@ -207,9 +195,7 @@ fun Registro(
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 25.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CampoContrasenha(
@@ -217,7 +203,7 @@ fun Registro(
                 onValorCambiado = { nuevaContra ->
                     datosUsuario = datosUsuario.copy(UsuarioContrasenha = nuevaContra)
                 },
-                label = stringResource(R.string.contrasenha)
+                label = "CONTRASEÑA"
             )
         }
 
@@ -228,12 +214,12 @@ fun Registro(
             CampoContrasenha(
                 valor = repitaContrasenha,
                 onValorCambiado = { repitaContrasenha = it },
-                label = stringResource(R.string.repita_contrasenha),
+                label = "REPITE CONTRASEÑA",
                 esError = !contrasenhasCoinciden && repitaContrasenha.isNotEmpty()
             )
             if (!contrasenhasCoinciden && repitaContrasenha.isNotEmpty()) {
                 Text(
-                    text = stringResource(R.string.contrasenhas_no_coinciden),
+                    text = "Las contraseñas no coinciden",
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -242,7 +228,7 @@ fun Registro(
         Spacer(modifier = Modifier.height(40.dp))
 
         Boton(
-            nombre = stringResource(R.string.crear_cuenta),
+            nombre = "Crear cuenta",
             onClick = { onRegisterClicked(datosUsuario) },
             enabled = contrasenhasCoinciden && datosUsuario.UsuarioNombre.isNotBlank() // y otros campos
         )
