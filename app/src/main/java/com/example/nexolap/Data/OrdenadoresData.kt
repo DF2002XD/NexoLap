@@ -12,7 +12,7 @@ val ordenadores = listOf(
     Ordenador(
         id = 1,
         nombre = "Apple MacBook Air 13\" (M2)",
-        imagenPrincipal = R.drawable.macbook_air_13,
+        imagenPrincipal = R.drawable.macbook_air_m2,
         especificaciones = listOf(
             Especificacion("Procesador", "Chip M2 de Apple con CPU de 8 núcleos y GPU de 8 núcleos"),
             Especificacion("Memoria RAM", "8 GB de memoria unificada (ampliable a 16 GB o 24 GB)"),

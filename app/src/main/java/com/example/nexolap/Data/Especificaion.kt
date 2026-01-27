@@ -7,7 +7,7 @@ package com.example.nexolap.Data
  * @property detalle El valor o descripción detallada de la característica (e.g., "Intel Core i7-11800H", "16GB DDR4").
  */
 data class Especificacion(
-    val idEspecificacion : Int,
-    val : String,
+    //val idEspecificacion : Int,
+    val nombre : String,
     val detalle: String
 )

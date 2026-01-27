@@ -22,7 +22,9 @@ import com.example.nexolap.myComponents.Detalles
  */
 @Composable
 fun DetallesPage(modifier: Modifier = Modifier, ordenadorId: Int){
-    Scaffold{innerPadding ->
+    Scaffold(
+
+    ){innerPadding ->
         Column(modifier = Modifier.padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally){
             Detalles(ordenadorId = ordenadorId)
         }

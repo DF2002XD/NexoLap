@@ -1,7 +1,5 @@
 package com.example.nexolap.Data
 
-import android.R
-
 /**
  * Representa un modelo de ordenador con sus características principales.
  *
@@ -11,8 +9,8 @@ import android.R
  * @property especificaciones Una lista de objetos [Especificacion] que detallan las características técnicas del ordenador.
  */
 data class Ordenador(
-    val id: String,
-    val imagenPrincipal: String,
+    val id: Int,
+    val imagenPrincipal: Int,
     val nombre: String,
     val especificaciones: List<Especificacion>
 )

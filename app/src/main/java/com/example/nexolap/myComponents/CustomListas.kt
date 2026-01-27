@@ -27,21 +27,21 @@ import kotlin.collections.filter
  */
 @Composable
 fun ListVertical(searchQuery: String = "") {
-    val productos = ordenadores
-
-    // --- INICIO DE LA CORRECCIÓN ---
-    val productosFiltrados = remember(searchQuery, productos) {
-        if (searchQuery.isBlank()) {
-            productos
-        } else {
-            productos.filter {
-                it.nombre.contains(searchQuery, ignoreCase = true)
-            }
-        }
-    }
+//    val productos = ordenadores
+//
+//    // --- INICIO DE LA CORRECCIÓN ---
+//    val productosFiltrados = remember(searchQuery, productos) {
+//        if (searchQuery.isBlank()) {
+//            productos
+//        } else {
+//            productos.filter {
+//                it.nombre.contains(searchQuery, ignoreCase = true)
+//            }
+//        }
+//    }
 
     LazyColumn(horizontalAlignment = Alignment.CenterHorizontally){
-        items(productosFiltrados) { producto ->
+        items(ordenadores) { producto ->
             TarjetaHorizontal(ordenador = producto, onClick = {})
         }
     }
