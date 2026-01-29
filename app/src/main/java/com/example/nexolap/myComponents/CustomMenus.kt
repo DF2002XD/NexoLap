@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +40,23 @@ fun TopAppTitle(title : String) {
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center) },
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun TopAppRegreso(){
+    TopAppBar(
+        title = { Text(text = "", color = Color.Black,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center) },
+        navigationIcon = {
+            IconButton(onClick = { /*TODO*/ })
+            {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Regreso")
+            }
+        }
     )
 }
 
@@ -88,4 +107,10 @@ fun PreviewTopAppTitle() {
 @Composable
 fun PreviewButtomAppBarNav() {
     ButtomAppBarNav(onHomeClick = {}, onSearchClick = {}, onProfileClick = {})
+}
+
+@Preview
+@Composable
+fun PreviewTopAppRegreso() {
+    TopAppRegreso()
 }
