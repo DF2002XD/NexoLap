@@ -1,4 +1,4 @@
-package com.example.nexolap.myComponents
+package com.example.nexolap.vista.myComponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -85,8 +85,7 @@ fun TarjetaVerticalPreview() {
         ordenador = Ordenador(
             1,
             nombre = "Apple MacBook Air 13\" (M2)",
-            imagenPrincipal = R.drawable.macbook_air_m2,
-            especificaciones = emptyList()
+            imagenPrincipal = R.drawable.macbook_air_m2
         ),
         onClick = { TODO() }
     )
@@ -98,7 +97,6 @@ fun TarjetaHorizontalPreview() {
     TarjetaHorizontal(ordenador = Ordenador(
         1,
         nombre = "Apple MacBook Air 13\" (M2)",
-        imagenPrincipal = R.drawable.macbook_air_m2,
-        especificaciones = emptyList()
+        imagenPrincipal = R.drawable.macbook_air_m2
     ), onClick = {TODO()})
 }

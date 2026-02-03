@@ -1,4 +1,4 @@
-package com.example.nexolap.myComponents
+package com.example.nexolap.vista.myComponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

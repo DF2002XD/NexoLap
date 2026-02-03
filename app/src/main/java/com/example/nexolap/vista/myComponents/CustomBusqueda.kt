@@ -1,6 +1,5 @@
-package com.example.nexolap.myComponents
+package com.example.nexolap.vista.myComponents
 
-import android.widget.SearchView
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
