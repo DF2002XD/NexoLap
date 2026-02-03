@@ -1,4 +1,4 @@
-package com.example.nexolap.myComponents
+package com.example.nexolap.vista.myComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -59,8 +59,8 @@ fun TablaEspecificaciones(especificaciones: List<Especificacion>) {
                     .padding(vertical = 12.dp), // Aumenta el espaciado vertical
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TableCell(text = especificacion.nombre, weight = 0.4f)
-                TableCell(text = especificacion.detalle, weight = 0.6f)
+                TableCell(text = especificacion.componente, weight = 0.4f)
+                TableCell(text = especificacion.descripcion, weight = 0.6f)
             }
             HorizontalDivider()
         }
@@ -99,9 +99,9 @@ fun RowScope.TableCell(
 fun TablaEspecificacionesPreview(){
     TablaEspecificaciones(
         especificaciones = listOf(
-            Especificacion("Especificacion 1", "Detalle 1"),
-            Especificacion("Especificacion 2", "Detalle 2"),
-            Especificacion("Especificacion 3", "Detalle 3")
+            Especificacion(0,"Especificacion 1", "Detalle 1"),
+            Especificacion(1,"Especificacion 2", "Detalle 2"),
+            Especificacion(2,"Especificacion 3", "Detalle 3")
         )
     )
 }

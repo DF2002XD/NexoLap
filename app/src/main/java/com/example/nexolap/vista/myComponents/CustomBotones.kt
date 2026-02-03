@@ -1,4 +1,4 @@
-package com.example.nexolap.myComponents
+package com.example.nexolap.vista.myComponents
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width

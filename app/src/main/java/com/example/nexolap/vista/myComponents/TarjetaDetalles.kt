@@ -1,4 +1,4 @@
-package com.example.nexolap.myComponents
+package com.example.nexolap.vista.myComponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.nexolap.Data.ordenadorSpecs
 import com.example.nexolap.Data.ordenadores
 
 /**
@@ -43,6 +44,12 @@ fun Detalles(ordenadorId: Int) {
         }
         return // Detiene la ejecución si no hay ordenador
     }
+
+    // Obtener las especificaciones asociadas al ordenador usando la tabla ordenadorSpecs
+    val specs = ordenadorSpecs
+        .filter { it.id_Ordenador.id == ordenador.id }
+        .map { it.id_Especificacion }
+
     // Si el ordenador se encuentra, muestra sus detalles.
     Column(
         modifier = Modifier
@@ -69,7 +76,7 @@ fun Detalles(ordenadorId: Int) {
 
         // --- SECCIÓN DE LA TABLA DE ESPECIFICACIONES ---
         // PASO 4: Pasa la lista de especificaciones del ordenador encontrado a la tabla.
-        TablaEspecificaciones(especificaciones = ordenador.especificaciones)
+        TablaEspecificaciones(especificaciones = specs)
     }
 }
 

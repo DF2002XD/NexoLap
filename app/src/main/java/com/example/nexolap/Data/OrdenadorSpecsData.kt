@@ -1,0 +1,25 @@
+package com.example.nexolap.Data
+
+val ordenadorSpecs = listOf(
+    OrdenadorSpecs(ordenadores[0], especificaciones[0]),
+    OrdenadorSpecs(ordenadores[0], especificaciones[1]),
+    OrdenadorSpecs(ordenadores[0], especificaciones[2]),
+    OrdenadorSpecs(ordenadores[0], especificaciones[3]),
+    OrdenadorSpecs(ordenadores[0], especificaciones[4]),
+    OrdenadorSpecs(ordenadores[0], especificaciones[5]),
+    OrdenadorSpecs(ordenadores[0], especificaciones[6]),
+    OrdenadorSpecs(ordenadores[1], especificaciones[7]),
+    OrdenadorSpecs(ordenadores[1], especificaciones[8]),
+    OrdenadorSpecs(ordenadores[1], especificaciones[9]),
+    OrdenadorSpecs(ordenadores[1], especificaciones[10]),
+    OrdenadorSpecs(ordenadores[1], especificaciones[11]),
+    OrdenadorSpecs(ordenadores[1], especificaciones[12]),
+    OrdenadorSpecs(ordenadores[1], especificaciones[13]),
+    OrdenadorSpecs(ordenadores[2], especificaciones[14]),
+    OrdenadorSpecs(ordenadores[2], especificaciones[15]),
+    OrdenadorSpecs(ordenadores[2], especificaciones[16]),
+    OrdenadorSpecs(ordenadores[2], especificaciones[17]),
+    OrdenadorSpecs(ordenadores[2], especificaciones[18]),
+    OrdenadorSpecs(ordenadores[2], especificaciones[19]),
+    OrdenadorSpecs(ordenadores[2], especificaciones[20]),
+)

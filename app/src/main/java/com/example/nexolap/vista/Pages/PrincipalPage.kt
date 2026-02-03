@@ -1,4 +1,4 @@
-package com.example.nexolap.Pages
+package com.example.nexolap.vista.Pages
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.nexolap.Data.ListaData
-import com.example.nexolap.myComponents.ButtomAppBarNav
-import com.example.nexolap.myComponents.ListHorizontal
-import com.example.nexolap.myComponents.TopAppTitle
+import com.example.nexolap.vista.myComponents.ButtomAppBarNav
+import com.example.nexolap.vista.myComponents.ListHorizontal
+import com.example.nexolap.vista.myComponents.TopAppTitle
 
 
 /**
