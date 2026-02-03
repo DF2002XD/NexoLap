@@ -10,7 +10,7 @@ package com.example.nexolap.Data
  * @property UsuarioCorreo The user's email address, used for login and communication.
  * @property UsuarioContrasenha The user's password for account authentication.
  */
-data class UsuarioData(
+data class Usuario(
     val UsuarioNombre: String,
     val UsuarioCorreo: String,
     val UsuarioContrasenha: String

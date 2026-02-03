@@ -28,7 +28,7 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nexolap.Data.UsuarioData
+import com.example.nexolap.Data.Usuario
 
 /**
  * Un Composable que muestra la pantalla de inicio de sesión.
@@ -125,11 +125,11 @@ fun InicioSesion (
  */
 @Composable
 fun Registro(
-    onRegisterClicked: (usuario: UsuarioData) -> Unit,
+    onRegisterClicked: (usuario: Usuario) -> Unit,
     onNavigateToLogin: () -> Unit
 ){
     var datosUsuario by remember {
-        mutableStateOf(UsuarioData("", "", ""))
+        mutableStateOf(Usuario("", "", ""))
     }
     var repitaContrasenha by remember { mutableStateOf("") }
     val contrasenhasCoinciden = datosUsuario.UsuarioContrasenha == repitaContrasenha
@@ -244,5 +244,5 @@ fun PreviewAcceso(){
 @Preview
 @Composable
 fun PreviewRegistro(){
-    Registro(onRegisterClicked = {UsuarioData("","","")}, onNavigateToLogin = {})
+    Registro(onRegisterClicked = {Usuario("","","")}, onNavigateToLogin = {})
 }
