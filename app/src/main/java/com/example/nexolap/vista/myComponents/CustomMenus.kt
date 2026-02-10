@@ -33,31 +33,28 @@ import androidx.compose.ui.unit.dp
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppTitle(title : String) {
+fun TopAppTitle(title : String, onBackClick: (() -> Unit)? = null) {
     TopAppBar(
-        title = { Text(text = title, color = Color.Black,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center) },
-    )
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun TopAppRegreso(){
-    TopAppBar(
-        title = { Text(text = "", color = Color.Black,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center) },
+        title = {
+            if (onBackClick == null) {
+                Text(
+                    text = title, color = Color.Black,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+        },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ })
-            {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Regreso")
+            if(onBackClick != null){
+                IconButton(onClick = { onBackClick}){
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Regreso")
+                }
             }
         }
     )
 }
+
 
 /**
  * Un composable para una barra de navegación inferior personalizada.
@@ -104,12 +101,13 @@ fun PreviewTopAppTitle() {
 
 @Preview
 @Composable
-fun PreviewButtomAppBarNav() {
-    ButtomAppBarNav(onHomeClick = {}, onSearchClick = {}, onProfileClick = {})
+fun PreviewTopAppTitleWithBack() {
+    TopAppTitle(title = "NexoLap", onBackClick = {})
+
 }
 
 @Preview
 @Composable
-fun PreviewTopAppRegreso() {
-    TopAppRegreso()
+fun PreviewButtomAppBarNav() {
+    ButtomAppBarNav(onHomeClick = {}, onSearchClick = {}, onProfileClick = {})
 }
