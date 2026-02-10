@@ -6,6 +6,6 @@ package com.example.nexolap.Data
  * Contiene un único usuario con credenciales vacías.
  */
 val Usuarios = listOf(
-    Usuario(UsuarioNombre = "", UsuarioCorreo = "", UsuarioContrasenha = "")
+    Usuario( UsuarioId = 0,UsuarioNombre = "", UsuarioCorreo = "", UsuarioContrasenha = "")
 )
 

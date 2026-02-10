@@ -33,6 +33,7 @@ import com.example.nexolap.Data.ordenadores
 @Composable
 fun Detalles(ordenadorId: Int) {
     val ordenador = ordenadores.find { it.id == ordenadorId }
+
     // Muestra un mensaje si el ordenador no se encuentra.
     if (ordenador == null) {
         Column(

@@ -129,7 +129,7 @@ fun Registro(
     onNavigateToLogin: () -> Unit
 ){
     var datosUsuario by remember {
-        mutableStateOf(Usuario("", "", ""))
+        mutableStateOf(Usuario(0 ,"", "", ""))
     }
     var repitaContrasenha by remember { mutableStateOf("") }
     val contrasenhasCoinciden = datosUsuario.UsuarioContrasenha == repitaContrasenha
@@ -244,5 +244,5 @@ fun PreviewAcceso(){
 @Preview
 @Composable
 fun PreviewRegistro(){
-    Registro(onRegisterClicked = {Usuario("","","")}, onNavigateToLogin = {})
+    Registro(onRegisterClicked = {Usuario( 0,"","","")}, onNavigateToLogin = {})
 }

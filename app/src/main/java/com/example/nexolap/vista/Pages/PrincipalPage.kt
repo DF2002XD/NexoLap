@@ -10,7 +10,10 @@ import com.example.nexolap.Data.ListaData
 import com.example.nexolap.vista.myComponents.ButtomAppBarNav
 import com.example.nexolap.vista.myComponents.ListHorizontal
 import com.example.nexolap.vista.myComponents.TopAppTitle
-
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.nexolap.viewmodel.vm.PrincipalPageVM
 
 /**
  * Función Composable que representa la pantalla principal o "página principal" de la aplicación.
@@ -23,7 +26,12 @@ import com.example.nexolap.vista.myComponents.TopAppTitle
  * @param modifier Un [Modifier] que se aplicará al diseño raíz de la página.
  */
 @Composable
-fun PrincipalPage(modifier: Modifier = Modifier) {
+fun PrincipalPage(
+    modifier: Modifier = Modifier,
+    vm: PrincipalPageVM = viewModel()
+) {
+    val uiState by vm.uiState.collectAsState()
+    vm.loadData()
     Scaffold(
         topBar = {
             TopAppTitle(
@@ -41,13 +49,22 @@ fun PrincipalPage(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             item {
-                ListHorizontal(listaData = ListaData("Más Vendidos"))
+                ListHorizontal(
+                    listaData = ListaData("Más Vendidos"),
+                    ordenadores = uiState.listaOrdenadores
+                )
             }
             item {
-                ListHorizontal(listaData = ListaData("Populares"))
+                ListHorizontal(
+                    listaData = ListaData("Populares"),
+                    ordenadores = uiState.listaOrdenadores
+                )
             }
             item {
-                ListHorizontal(listaData = ListaData("Nuevos Lanzamientos"))
+                ListHorizontal(
+                    listaData = ListaData("Nuevos Lanzamientos"),
+                    ordenadores = uiState.listaOrdenadores
+                )
             }
         }
     }

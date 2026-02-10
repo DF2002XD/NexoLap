@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nexolap.Data.ListaData
-import com.example.nexolap.Data.ordenadores
+import com.example.nexolap.Data.Ordenador
+import com.example.nexolap.viewmodel.uistate.OrdenadorUIState1
+
 
 /**
  * Un composable que muestra una lista vertical de productos (ordenadores).
@@ -24,7 +26,9 @@ import com.example.nexolap.Data.ordenadores
  *                    en el nombre del producto. Si está en blanco, se muestran todos los productos.
  */
 @Composable
-fun ListVertical(searchQuery: String = "") {
+fun ListVertical(
+    ordenadores: List<OrdenadorUIState1>,
+    searchQuery: String = "") {
 //    val productos = ordenadores
 //
 //    // --- INICIO DE LA CORRECCIÓN ---
@@ -40,7 +44,7 @@ fun ListVertical(searchQuery: String = "") {
 
     LazyColumn(horizontalAlignment = Alignment.CenterHorizontally){
         items(ordenadores) { producto ->
-            TarjetaHorizontal(ordenador = producto, onClick = {})
+            TarjetaHorizontal(ordenador = Ordenador(producto.id, producto.imagenPrincipal, producto.nombre), onClick = {})
         }
     }
 }
@@ -53,13 +57,14 @@ fun ListVertical(searchQuery: String = "") {
  *                  incluyendo el título que se mostrará encima de la fila horizontal.
  */
 @Composable
-fun ListHorizontal(listaData: ListaData) {
+fun ListHorizontal(listaData: ListaData,
+                   ordenadores: List<OrdenadorUIState1>) {
    Column(modifier = Modifier.padding(10.dp)) {
          Text(text = listaData.title)
          LazyRow() {
               item {
-                  for (i in 1..10) {
-                      TarjetaVertical(ordenador = ordenadores[i], onClick = {})
+                  for (producto in ordenadores.take(10)) {
+                      TarjetaVertical(ordenador = Ordenador(producto.id, producto.imagenPrincipal, producto.nombre), onClick = {})
                   }
               }
          }
@@ -69,11 +74,11 @@ fun ListHorizontal(listaData: ListaData) {
 @Preview
 @Composable
 fun PreviewListVertical() {
-    ListVertical()
+    ListVertical( ordenadores = emptyList())
 }
 
 @Preview
 @Composable
 fun PreviewListHorizontal() {
-    ListHorizontal(listaData = ListaData("Lista Vertical"))
+    ListHorizontal(listaData = ListaData("Lista Vertical"), ordenadores = emptyList())
 }

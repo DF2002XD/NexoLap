@@ -31,19 +31,20 @@ import com.example.nexolap.R
  * @param onClick Una función lambda que se ejecutará cuando se haga clic en la tarjeta.
  */
 @Composable
-fun TarjetaVertical (ordenador: Ordenador, onClick: () -> Unit) {
+fun TarjetaVertical(ordenador: Ordenador, onClick: () -> Unit) {
     var clicado by remember { mutableStateOf(true) }
-    Column(modifier = Modifier
-        .width(120.dp)
-        .clickable(enabled = clicado) {
-            onClick()
-        }) {
+    Column(
+        modifier = Modifier
+            .width(120.dp)
+            .clickable(enabled = clicado) {
+                onClick()
+            }) {
         Image(
             painter = painterResource(id = ordenador.imagenPrincipal),
             contentDescription = "Play Button",
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-        Column{
+        Column {
             Text(text = ordenador.nombre, textAlign = TextAlign.Center)
         }
     }
@@ -60,18 +61,19 @@ fun TarjetaVertical (ordenador: Ordenador, onClick: () -> Unit) {
  * @param onClick Una función lambda que se ejecutará cuando se haga clic en la tarjeta.
  */
 @Composable
-fun TarjetaHorizontal (ordenador: Ordenador, onClick: () -> Unit) {
+fun TarjetaHorizontal(ordenador: Ordenador, onClick: () -> Unit) {
     var clicado by remember { mutableStateOf(true) }
-    Row(modifier = Modifier
-        .width(250.dp)
-        .clickable(enabled = clicado) {
-            onClick()
-        }){
+    Row(
+        modifier = Modifier
+            .width(250.dp)
+            .clickable(enabled = clicado) {
+                onClick()
+            }) {
         Image(
             painter = painterResource(id = ordenador.imagenPrincipal),
             contentDescription = "Play Button",
         )
-        Column(Modifier .align(Alignment.CenterVertically)) {
+        Column(Modifier.align(Alignment.CenterVertically)) {
             Text(text = ordenador.nombre)
         }
     }
@@ -91,12 +93,13 @@ fun TarjetaVerticalPreview() {
     )
 }
 
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun TarjetaHorizontalPreview() {
-    TarjetaHorizontal(ordenador = Ordenador(
-        1,
-        nombre = "Apple MacBook Air 13\" (M2)",
-        imagenPrincipal = R.drawable.macbook_air_m2
-    ), onClick = {TODO()})
+    TarjetaHorizontal(
+        ordenador = Ordenador(
+            1,
+            nombre = "Apple MacBook Air 13\" (M2)",
+            imagenPrincipal = R.drawable.macbook_air_m2
+        ), onClick = { TODO() })
 }
