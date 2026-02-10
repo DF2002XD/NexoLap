@@ -11,6 +11,7 @@ package com.example.nexolap.Data
  * @property UsuarioContrasenha The user's password for account authentication.
  */
 data class Usuario(
+    val UsuarioId: Int,
     val UsuarioNombre: String,
     val UsuarioCorreo: String,
     val UsuarioContrasenha: String
