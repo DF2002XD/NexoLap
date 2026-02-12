@@ -5,9 +5,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.nexolap.viewmodel.vm.BusquedaPageVM
+import com.example.nexolap.viewmodel.vm.PrincipalPageVM
 import com.example.nexolap.vista.myComponents.Buscador
 import com.example.nexolap.vista.myComponents.ButtomAppBarNav
 import com.example.nexolap.vista.myComponents.ListVertical
@@ -30,7 +35,10 @@ import com.example.nexolap.vista.myComponents.ListVertical
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BusquedaPage(modifier: Modifier = Modifier) {
+fun BusquedaPage(modifier: Modifier = Modifier,
+                 vm: BusquedaPageVM = viewModel()) {
+    val uiState by vm.uiState.collectAsState()
+    vm.loadData()
     Scaffold (
         bottomBar = {
             ButtomAppBarNav(
@@ -42,7 +50,7 @@ fun BusquedaPage(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally) {
             Buscador()
-            ListVertical()
+            ListVertical(ordenadores = uiState.listaOrdenadores)
         }
     }
 }

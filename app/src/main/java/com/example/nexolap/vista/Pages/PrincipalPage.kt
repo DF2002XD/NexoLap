@@ -10,10 +10,10 @@ import com.example.nexolap.Data.ListaData
 import com.example.nexolap.vista.myComponents.ButtomAppBarNav
 import com.example.nexolap.vista.myComponents.ListHorizontal
 import com.example.nexolap.vista.myComponents.TopAppTitle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.example.nexolap.viewmodel.vm.PrincipalPageVM
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 /**
  * Función Composable que representa la pantalla principal o "página principal" de la aplicación.
