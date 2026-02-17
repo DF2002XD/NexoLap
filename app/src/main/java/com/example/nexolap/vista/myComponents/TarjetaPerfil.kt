@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -34,13 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.R
-
 
 
 /**
@@ -57,7 +58,7 @@ import com.example.nexolap.R
 fun Perfil(
     nombreUsuarioInicial: String = "Nombre Usuario",
     correoInicial: String = "hello@reallygreatsite.com"
-){
+) {
     var nombreUsuario by remember { mutableStateOf(nombreUsuarioInicial) }
     var correo by remember { mutableStateOf(correoInicial) }
     var nuevaContrasenha by remember { mutableStateOf("") }
@@ -88,7 +89,7 @@ fun Perfil(
                 onClick = { /* TODO: Lógica para cambiar la foto de perfil */ },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .offset(x = 10.dp, y = 10.dp) // Ajusta el offset para que no esté pegado
+                    .offset(x = 10.dp, y = 10.dp)
                     .background(
                         MaterialTheme.colorScheme.surface,
                         CircleShape
@@ -109,7 +110,7 @@ fun Perfil(
             }
         }
 
-        Text("Correo electrónico", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Start)
+        Text(text = stringResource(R.string.Correo_electronico), fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = correo,
@@ -122,18 +123,18 @@ fun Perfil(
             onClick = { /* TODO: Lógica para actualizar el correo */ },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Actualizar correo")
+            Text(text = stringResource(R.string.Actualizar_correo))
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text("Contraseña", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        Text(text = stringResource(R.string.contrasenha), fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
 
         CampoContrasenha(
             valor = nuevaContrasenha,
             onValorCambiado = { nuevaContrasenha = it },
-            label = "Nueva contraseña"
+            label = stringResource(R.string.Nueva_contrasenha)
 
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -141,13 +142,13 @@ fun Perfil(
         CampoContrasenha(
             valor = repetirContrasenha,
             onValorCambiado = { repetirContrasenha = it },
-            label = "Repetir contraseña",
+            label = stringResource(R.string.Repetir_contrasenha),
             esError = !contrasenhasCoinciden && repetirContrasenha.isNotEmpty()
         )
 
         if (!contrasenhasCoinciden && repetirContrasenha.isNotEmpty()) {
             Text(
-                text = "Las contraseñas no coinciden",
+                text = stringResource(R.string.contrasenhas_no_coinciden),
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(top = 4.dp),
                 textAlign = TextAlign.Start,
@@ -156,13 +157,22 @@ fun Perfil(
         }
         Spacer(modifier = Modifier.height(24.dp))
 
-        Boton("Actualizar contraseña", onClick = { /* TODO: Lógica para actualizar la contraseña */ },
-            enabled = contrasenhasCoinciden && nuevaContrasenha.isNotEmpty())
+        Boton(
+            stringResource(R.string.Actualizar_contrasenha), onClick = { /* TODO: Lógica para actualizar la contraseña */ },
+            enabled = contrasenhasCoinciden && nuevaContrasenha.isNotEmpty()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Boton(
+            stringResource(R.string.Eliminar_cuenta), onClick = { /* TODO: Lógica para eliminar la cuenta */ },
+            enabled = true
+        )
+
     }
 }
 
-    @Preview
-    @Composable
-    fun PerfilPreview() {
-        Perfil()
-    }
+@Preview
+@Composable
+fun PerfilPreview() {
+    Perfil()
+}

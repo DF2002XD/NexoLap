@@ -3,37 +3,58 @@ package com.example.nexolap.vista.Pages
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.nexolap.viewmodel.vm.DetallesPageVM
 import com.example.nexolap.vista.myComponents.Detalles
+import com.example.nexolap.vista.myComponents.TopAppTitle
 
-/**
- * Un composable que representa la pantalla de detalles de un ordenador específico.
- *
- * Esta pantalla actúa como un contenedor para el componente `Detalles`, proporcionando una
- * estructura de diseño básica con un `Scaffold`. Recibe el ID del ordenador que se
- * debe mostrar y lo pasa al componente `Detalles`, que es el responsable de obtener
- * y renderizar los datos concretos.
- *
- * @param modifier Un [Modifier] opcional para ser aplicado al layout.
- * @param ordenadorId El identificador único del ordenador cuyos detalles se van a mostrar.
- */
+
 @Composable
-fun DetallesPage(modifier: Modifier = Modifier, ordenadorId: Int){
-    Scaffold(
+fun DetallesPage(modifier: Modifier = Modifier,ordenadorId : Int, vm: DetallesPageVM = viewModel()) {
 
-    ){innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally){
-            Detalles(ordenadorId = ordenadorId)
+    val ordenadorState by vm.ordenadorState.collectAsState()
+    val especificacionesState by vm.especificacionesState.collectAsState()
+    val relacionesState by vm.relacionesState.collectAsState()
+
+
+    vm.getDetalles(ordenadorId)
+
+    Scaffold(
+        topBar = {
+            TopAppTitle(
+                title = "",
+                onBackClick = { /* Acción al hacer clic en el ícono de retroceso */ }
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier.padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val ordenador = ordenadorState?.listaOrdenadores?.firstOrNull()
+            if (ordenador != null && relacionesState.listaOrdenadorSpecs.isNotEmpty()) {
+                Detalles(
+                    ordenador = ordenador,
+                    especificaciones = especificacionesState.listaEspecificaciones
+                )
+            }else if (ordenador != null) {
+                Text(text = "Este ordenador no tiene especificaciones registradas.")
+            }else {
+                Text(text = "Este ordenador no existe.")
+            }
         }
     }
 }
 
 @Preview
 @Composable
-fun DetallesPagePreview(){
+fun DetallesPagePreview() {
     DetallesPage(ordenadorId = 1)
-
 }

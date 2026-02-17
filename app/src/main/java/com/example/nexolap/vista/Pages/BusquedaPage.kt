@@ -12,34 +12,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nexolap.viewmodel.vm.BusquedaPageVM
-import com.example.nexolap.viewmodel.vm.PrincipalPageVM
 import com.example.nexolap.vista.myComponents.Buscador
 import com.example.nexolap.vista.myComponents.ButtomAppBarNav
 import com.example.nexolap.vista.myComponents.ListVertical
 
-
-/**
- * Un Composable que representa la página de búsqueda de la aplicación.
- *
- * Esta pantalla está estructurada utilizando un [Scaffold], que proporciona una
- * estructura de diseño estándar. Incluye una barra de navegación inferior personalizada
- * (`ButtomAppBarNav`) para navegar entre las secciones principales de la aplicación
- * (Inicio, Búsqueda, Perfil).
- *
- * El área de contenido principal, dentro de una [Column], contiene un componente de
- * barra de búsqueda (`Buscador`) en la parte superior, seguido de una lista vertical
- * (`ListVertical`) que probablemente muestra los resultados de la búsqueda o una lista
- * de elementos para explorar.
- *
- * @param modifier Un [Modifier] para ser aplicado a este Composable. El valor por defecto es [Modifier].
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BusquedaPage(modifier: Modifier = Modifier,
-                 vm: BusquedaPageVM = viewModel()) {
+fun BusquedaPage(
+    modifier: Modifier = Modifier,
+    vm: BusquedaPageVM = viewModel()
+) {
     val uiState by vm.uiState.collectAsState()
-    vm.loadData()
-    Scaffold (
+    val searchText by vm.searchText.collectAsState()
+
+    vm.obtenerOrdenadores()
+
+
+    Scaffold(
         bottomBar = {
             ButtomAppBarNav(
                 onHomeClick = { /* Acción al hacer clic en el ícono de inicio */ },
@@ -48,8 +37,14 @@ fun BusquedaPage(modifier: Modifier = Modifier,
             )
         }
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally) {
-            Buscador()
+        Column(
+            modifier = Modifier.padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Buscador(
+                searchText = searchText,
+                onSearchTextChange = { vm.onSearchTextChange(it) }
+            )
             ListVertical(ordenadores = uiState.listaOrdenadores)
         }
     }

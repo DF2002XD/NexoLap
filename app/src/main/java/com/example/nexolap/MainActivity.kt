@@ -10,6 +10,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.nexolap.vista.Pages.InicioPage
 import com.example.nexolap.ui.theme.NexoLapTheme
+import com.example.nexolap.vista.Pages.BusquedaPage
+import com.example.nexolap.vista.Pages.DetallesPage
+import com.example.nexolap.vista.Pages.PerfilPage
+import com.example.nexolap.vista.Pages.PrincipalPage
+import com.example.nexolap.vista.Pages.RegistroPage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,12 +23,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             NexoLapTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    InicioPage(modifier = Modifier.padding(innerPadding))
-//                    RegistroPage(modifier = Modifier.padding(innerPadding))
-                    //PrincipalPage(modifier = Modifier.padding(innerPadding))
-//                    BusquedaPage(modifier = Modifier.padding(innerPadding))
-//                    DetallesPage(modifier = Modifier.padding(innerPadding), ordenadorId = 1)
-//                    PerfilPage(modifier = Modifier.padding(innerPadding))
+                    //InicioPage(modifier = Modifier.padding(innerPadding))
+                    //RegistroPage(modifier = Modifier.padding(innerPadding))
+                    PrincipalPage(modifier = Modifier.padding(innerPadding))
+                    //BusquedaPage(modifier = Modifier.padding(innerPadding))
+                    //DetallesPage(modifier = Modifier.padding(innerPadding), ordenadorId = 1)
+                    //PerfilPage(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

@@ -18,4 +18,10 @@
     <string name="ordenador_no_encontrado">Producto no encontrado</string>
     <string name="especificaciones">Especificación</string>
     <string name="detalles">Detalle</string>
+    <string name="Correo_electronico">Correo electrónico</string>
+    <string name="Actualizar_correo">Actualizar correo</string>
+    <string name="Nueva_contrasenha">Nueva contraseña</string>
+    <string name="Repetir_contrasenha">Repetir contraseña</string>
+    <string name="Actualizar_contrasenha">Actualizar contraseña</string>
+    <string name="Eliminar_cuenta">Eliminar cuenta</string>
 </resources>

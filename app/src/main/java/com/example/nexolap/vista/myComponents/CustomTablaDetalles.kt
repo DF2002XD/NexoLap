@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.Data.Especificacion
+import com.example.nexolap.viewmodel.uistate.especificacionUIState1
 
 /**
  * Un composable que muestra una tabla de especificaciones de producto.
@@ -28,7 +29,7 @@ import com.example.nexolap.Data.Especificacion
  *                         Cada objeto representa una fila en la tabla.
  */
 @Composable
-fun TablaEspecificaciones(especificaciones: List<Especificacion>) {
+fun TablaEspecificaciones(especificaciones: List<especificacionUIState1>) {
     Column(
         modifier = Modifier.fillMaxWidth() // La tabla ahora ocupa todo el ancho
     ) {
@@ -99,9 +100,10 @@ fun RowScope.TableCell(
 fun TablaEspecificacionesPreview(){
     TablaEspecificaciones(
         especificaciones = listOf(
-            Especificacion(0,"Especificacion 1", "Detalle 1"),
-            Especificacion(1,"Especificacion 2", "Detalle 2"),
-            Especificacion(2,"Especificacion 3", "Detalle 3")
+            especificacionUIState1(1, "Procesador", "Intel Core i5-12400H"),
+            especificacionUIState1(2, "Memoria", "16 GB RAM"),
+            especificacionUIState1(3, "Disco Duro", "512 GB SSD"),
+            especificacionUIState1(4, "Tarjeta Gráfica", "NVIDIA GeForce RTX 3050")
         )
     )
 }

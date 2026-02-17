@@ -14,11 +14,6 @@ class PrincipalPageVM : ViewModel() {
 
     val repo: OrdenadorRepo = OrdenadorRepo()
 
-    fun cargarDatos(){
-        _uiState.value = ListaOrdenadoresUIState1()
-    }
-
-
     fun loadData(){
         repo.readAll(
             {

@@ -7,32 +7,42 @@ import com.example.nexolap.viewmodel.uistate.OrdenadorUIState1
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class BusquedaPageVM : ViewModel() {
     private val _uiState = MutableStateFlow(ListaOrdenadoresUIState1())
     val uiState: StateFlow<ListaOrdenadoresUIState1> = _uiState.asStateFlow()
 
-    val repo: OrdenadorRepo = OrdenadorRepo()
+    private val _searchText = MutableStateFlow("")
+    val searchText: StateFlow<String> = _searchText.asStateFlow()
 
-    fun cargarDatos(){
-        _uiState.value = ListaOrdenadoresUIState1()
-    }
+    private val repo: OrdenadorRepo = OrdenadorRepo()
+    private var allOrdenadores = listOf<OrdenadorUIState1>()
 
 
-    fun loadData(){
+    fun obtenerOrdenadores() {
         repo.readAll(
-            {
-                _uiState.value = ListaOrdenadoresUIState1(it.map {
-                    OrdenadorUIState1(
-                        it.id,
-                        it.nombre,
-                        it.imagenPrincipal
-                    )
-                })
+            onSucess = { listaDTO ->
+                allOrdenadores = listaDTO.map {
+                    OrdenadorUIState1(it.id, it.nombre, it.imagenPrincipal)
+                }
+                _uiState.update { it.copy(listaOrdenadores = allOrdenadores) }
             },
-            onError ={
-
+            onError = {
+                // Manejar error si es necesario
             }
         )
+    }
+
+    fun onSearchTextChange(text: String) {
+        _searchText.value = text
+        val filteredList = if (text.isEmpty()) {
+            allOrdenadores
+        } else {
+            allOrdenadores.filter {
+                it.nombre.contains(text, ignoreCase = true)
+            }
+        }
+        _uiState.update { it.copy(listaOrdenadores = filteredList) }
     }
 }
