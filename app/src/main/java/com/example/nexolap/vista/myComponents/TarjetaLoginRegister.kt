@@ -1,6 +1,7 @@
 package com.example.nexolap.vista.myComponents
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -34,7 +36,10 @@ import com.example.nexolap.R
 
 
 @Composable
-fun InicioSesion(
+fun LoginSesion(
+    keepLogged: Boolean,
+    onKeepLoggedChange: (Boolean) -> Unit,
+    errorMessage: String? = null,
     onLoginClicked: (correo: String, contrasenha: String) -> Unit,
     onNavigateToRegister: () -> Unit
 ) {
@@ -44,10 +49,12 @@ fun InicioSesion(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = 24.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(150.dp))
+
+        Spacer(modifier = Modifier.height(100.dp))
 
         Text(
             text = stringResource(R.string.inicio_de_sesion),
@@ -55,13 +62,11 @@ fun InicioSesion(
             modifier = Modifier.padding(bottom = 60.dp)
         )
 
-        Spacer(modifier = Modifier.height(100.dp))
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally // Alinea el texto a la izquierda
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(R.string.correo),
@@ -72,14 +77,13 @@ fun InicioSesion(
                 value = correo,
                 onValueChange = { correo = it },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
-
-                )
+                    .fillMaxWidth(),
+                singleLine = true
+            )
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CampoContrasenha(
@@ -89,7 +93,27 @@ fun InicioSesion(
             )
         }
 
-        Spacer(modifier = Modifier.height(70.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = keepLogged,
+                onCheckedChange = onKeepLoggedChange
+            )
+            Text(text = "Mantener sesión iniciada", fontSize = 16.sp)
+        }
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(bottom = 16.dp),
+                textAlign = TextAlign.Center
+            )
+        }
 
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -109,20 +133,24 @@ fun InicioSesion(
                 enabled = true
             )
         }
+        Spacer(modifier = Modifier.height(40.dp))
     }
 }
 
 
+
 @Composable
 fun Registro(
-    onRegisterClicked: (usuario: Usuario) -> Unit,
+    usuario: Usuario,
+    repitaContrasenha: String,
+    onNombreChange: (String) -> Unit,
+    onCorreoChange: (String) -> Unit,
+    onContrasenhaChange: (String) -> Unit,
+    onRepitaContrasenhaChange: (String) -> Unit,
+    onRegisterClicked: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
-    var datosUsuario by remember {
-        mutableStateOf(Usuario(0, "", "", ""))
-    }
-    var repitaContrasenha by remember { mutableStateOf("") }
-    val contrasenhasCoinciden = datosUsuario.UsuarioContrasenha == repitaContrasenha
+    val contrasenhasCoinciden = usuario.UsuarioContrasenha == repitaContrasenha
 
     Column(
         modifier = Modifier
@@ -132,7 +160,7 @@ fun Registro(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
-            modifier = Modifier.padding(top = 80.dp, bottom = 40.dp), // Aumentado espacio inferior
+            modifier = Modifier.padding(top = 80.dp, bottom = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -143,16 +171,21 @@ fun Registro(
             val annotatedText = buildAnnotatedString {
                 append(stringResource(R.string.ya_esta_registrado))
                 append(" ")
-                withLink(
-                    LinkAnnotation.Clickable(
+                val start = length
+                append(stringResource(R.string.login_aqui))
+                addStyle(
+                    style = SpanStyle(color = Color.Blue),
+                    start = start,
+                    end = length
+                )
+                addLink(
+                    clickable = LinkAnnotation.Clickable(
                         tag = "LOGIN",
-                        linkInteractionListener = { onNavigateToLogin() }
-                    )
-                ) {
-                    withStyle(style = SpanStyle(color = Color.Blue)) {
-                        append(stringResource(R.string.login_aqui))
-                    }
-                }
+                        linkInteractionListener = { _ -> onNavigateToLogin() }
+                    ),
+                    start = start,
+                    end = length
+                )
             }
             Text(text = annotatedText, modifier = Modifier.padding(top = 10.dp), fontSize = 16.sp)
         }
@@ -169,10 +202,8 @@ fun Registro(
                 fontSize = 25.sp
             )
             TextField(
-                value = datosUsuario.UsuarioNombre,
-                onValueChange = { nuevoNombre ->
-                    datosUsuario = datosUsuario.copy(UsuarioNombre = nuevoNombre)
-                },
+                value = usuario.UsuarioNombre,
+                onValueChange = onNombreChange,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
@@ -190,10 +221,8 @@ fun Registro(
                 fontSize = 25.sp
             )
             TextField(
-                value = datosUsuario.UsuarioCorreo,
-                onValueChange = { nuevoCorreo ->
-                    datosUsuario = datosUsuario.copy(UsuarioCorreo = nuevoCorreo)
-                },
+                value = usuario.UsuarioCorreo,
+                onValueChange = onCorreoChange,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
             )
@@ -206,10 +235,8 @@ fun Registro(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CampoContrasenha(
-                valor = datosUsuario.UsuarioContrasenha,
-                onValorCambiado = { nuevaContra ->
-                    datosUsuario = datosUsuario.copy(UsuarioContrasenha = nuevaContra)
-                },
+                valor = usuario.UsuarioContrasenha,
+                onValorCambiado = onContrasenhaChange,
                 label = stringResource(R.string.contrasenha)
             )
         }
@@ -220,7 +247,7 @@ fun Registro(
         ) {
             CampoContrasenha(
                 valor = repitaContrasenha,
-                onValorCambiado = { repitaContrasenha = it },
+                onValorCambiado = onRepitaContrasenhaChange,
                 label = stringResource(R.string.repita_contrasenha),
                 esError = !contrasenhasCoinciden && repitaContrasenha.isNotEmpty()
             )
@@ -236,8 +263,8 @@ fun Registro(
 
         Boton(
             nombre = stringResource(R.string.crear_cuenta),
-            onClick = { onRegisterClicked(datosUsuario) },
-            enabled = contrasenhasCoinciden && datosUsuario.UsuarioNombre.isNotBlank() // y otros campos
+            onClick = onRegisterClicked,
+            enabled = contrasenhasCoinciden && usuario.UsuarioNombre.isNotBlank() && usuario.UsuarioCorreo.isNotBlank() && usuario.UsuarioContrasenha.isNotBlank()
         )
         Spacer(modifier = Modifier.height(40.dp))
     }
@@ -246,11 +273,25 @@ fun Registro(
 @Preview
 @Composable
 fun PreviewAcceso() {
-    InicioSesion(onLoginClicked = { _, _ -> }, onNavigateToRegister = {})
+    LoginSesion(
+        keepLogged = false,
+        onKeepLoggedChange = {},
+        onLoginClicked = { _, _ -> },
+        onNavigateToRegister = {}
+    )
 }
 
 @Preview
 @Composable
 fun PreviewRegistro() {
-    Registro(onRegisterClicked = { Usuario(0, "", "", "") }, onNavigateToLogin = {})
+    Registro(
+        usuario = Usuario(0, "", "", ""),
+        repitaContrasenha = "",
+        onNombreChange = {},
+        onCorreoChange = {},
+        onContrasenhaChange = {},
+        onRepitaContrasenhaChange = {},
+        onRegisterClicked = {},
+        onNavigateToLogin = {}
+    )
 }

@@ -19,7 +19,9 @@ import com.example.nexolap.vista.myComponents.ListVertical
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BusquedaPage(
-    modifier: Modifier = Modifier,
+    onHomeClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {},
     vm: BusquedaPageVM = viewModel()
 ) {
     val uiState by vm.uiState.collectAsState()
@@ -31,9 +33,9 @@ fun BusquedaPage(
     Scaffold(
         bottomBar = {
             ButtomAppBarNav(
-                onHomeClick = { /* Acción al hacer clic en el ícono de inicio */ },
-                onSearchClick = { /* Acción al hacer clic en el ícono de búsqueda */ },
-                onProfileClick = { /* Acción al hacer clic en el ícono de cuenta */ },
+                onHomeClick = onHomeClick,
+                onSearchClick = onSearchClick,
+                onProfileClick = onProfileClick,
             )
         }
     ) { innerPadding ->

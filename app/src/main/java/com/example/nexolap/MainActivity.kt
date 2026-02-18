@@ -4,32 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
-import com.example.nexolap.vista.Pages.InicioPage
+import com.example.nexolap.Data.repository.UsuarioRepo
 import com.example.nexolap.ui.theme.NexoLapTheme
-import com.example.nexolap.vista.Pages.BusquedaPage
-import com.example.nexolap.vista.Pages.DetallesPage
-import com.example.nexolap.vista.Pages.PerfilPage
-import com.example.nexolap.vista.Pages.PrincipalPage
-import com.example.nexolap.vista.Pages.RegistroPage
+import com.example.nexolap.vista.Navegacion.AppNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        UsuarioRepo.init(this)
         setContent {
             NexoLapTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    //InicioPage(modifier = Modifier.padding(innerPadding))
-                    //RegistroPage(modifier = Modifier.padding(innerPadding))
-                    PrincipalPage(modifier = Modifier.padding(innerPadding))
-                    //BusquedaPage(modifier = Modifier.padding(innerPadding))
-                    //DetallesPage(modifier = Modifier.padding(innerPadding), ordenadorId = 1)
-                    //PerfilPage(modifier = Modifier.padding(innerPadding))
-                }
+                AppNavigation()
             }
         }
     }

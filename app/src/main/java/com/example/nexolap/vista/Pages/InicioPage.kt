@@ -1,34 +1,63 @@
 package com.example.nexolap.vista.Pages
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.nexolap.vista.myComponents.InicioSesion
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.nexolap.viewmodel.vm.LoginPageVM
+import com.example.nexolap.vista.myComponents.LoginSesion
 
 
-/**
- * Función Composable que representa la pantalla principal o de inicio de la aplicación.
- * Configura la estructura de diseño básica utilizando un `Scaffold` y centra el componente
- * `InicioSesion`, que maneja la interfaz de inicio de sesión del usuario.
- *
- * @param modifier Un [Modifier] que se aplica al elemento raíz de este composable. Por defecto es [Modifier].
- */
 @Composable
-fun InicioPage(modifier: Modifier = Modifier) {
-    Scaffold{innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally){
-            InicioSesion(onLoginClicked = {_,_ ->}, onNavigateToRegister = {})
+fun LoginPage(
+    modifier: Modifier = Modifier,
+    onLoginSuccess: (Int) -> Unit = {},
+    onNavigateToRegister: () -> Unit = {},
+    vm: LoginPageVM = viewModel()
+) {
+    val uiState by vm.uiState.collectAsState()
+
+    Scaffold(modifier = modifier) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LoginSesion(
+                    keepLogged = uiState.keepLogged,
+                    onKeepLoggedChange = { vm.onKeepLoggedChange(it) },
+                    errorMessage = uiState.errorMessage,
+                    onLoginClicked = { correo, contra ->
+                        vm.login(
+                            correo = correo,
+                            contrasenha = contra,
+                            onSuccess = { usuario -> 
+                                onLoginSuccess(usuario.id)
+                            }
+                        )
+                    },
+                    onNavigateToRegister = onNavigateToRegister
+                )
+            }
+
+            if (uiState.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
         }
     }
-
 }
 
 @Preview
 @Composable
-fun InicioPagePreview() {
-    InicioPage()
+fun LoginPagePreview() {
+    LoginPage()
 }

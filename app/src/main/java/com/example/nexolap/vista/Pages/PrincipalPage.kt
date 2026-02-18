@@ -28,6 +28,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun PrincipalPage(
     modifier: Modifier = Modifier,
+    onHomeClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {},
     vm: PrincipalPageVM = viewModel()
 ) {
     val uiState by vm.uiState.collectAsState()
@@ -40,9 +43,9 @@ fun PrincipalPage(
         },
         bottomBar = {
             ButtomAppBarNav(
-                onHomeClick = { /* Acción al hacer clic en el ícono de inicio */ },
-                onSearchClick = { /* Acción al hacer clic en el ícono de búsqueda */ },
-                onProfileClick = { /* Acción al hacer clic en el ícono de cuenta */ },
+                onHomeClick = onHomeClick,
+                onSearchClick = onSearchClick,
+                onProfileClick = onProfileClick
             )
         }
 

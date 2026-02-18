@@ -1,7 +1,7 @@
 package com.example.nexolap.vista.myComponents
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,15 +13,16 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -33,8 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,47 +43,48 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.R
 
-
-/**
- * Un Composable que muestra la pantalla de perfil de usuario.
- *
- * Permite al usuario ver y editar su información de perfil, incluyendo la foto de perfil,
- * el nombre de usuario, el correo electrónico y la contraseña. La pantalla es desplazable
- * para adaptarse a diferentes tamaños de pantalla y valida que las contraseñas nuevas coincidan.
- *
- * @param nombreUsuarioInicial El nombre de usuario inicial que se mostrará en el perfil.
- * @param correoInicial El correo electrónico inicial que se mostrará y se podrá editar.
- */
 @Composable
 fun Perfil(
-    nombreUsuarioInicial: String = "Nombre Usuario",
-    correoInicial: String = "hello@reallygreatsite.com"
+    nombreUsuarioInicial: String,
+    colorFondo: Color = Color.Gray,
+    onActualizarNombre: (String) -> Unit = {},
+    onActualizarCorreo: (String) -> Unit = {},
+    onActualizarContrasenha: (String) -> Unit = {},
+    onEliminarCuenta: () -> Unit = {}
 ) {
     var nombreUsuario by remember { mutableStateOf(nombreUsuarioInicial) }
-    var correo by remember { mutableStateOf(correoInicial) }
+    var nuevoCorreo by remember { mutableStateOf("") }
     var nuevaContrasenha by remember { mutableStateOf("") }
     var repetirContrasenha by remember { mutableStateOf("") }
+    var isEditingNombre by remember { mutableStateOf(false) }
     val contrasenhasCoinciden = nuevaContrasenha == repetirContrasenha
+
+    // Obtenemos la inicial del nombre actual
+    val inicial = if (nombreUsuario.isNotEmpty()) nombreUsuario.take(1).uppercase() else "?"
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()) // Permite hacer scroll si el contenido no cabe
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Box(modifier = Modifier.padding(bottom = 16.dp)) {
-
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground), // Reemplaza con tu imagen
-                contentDescription = "Foto de perfil",
-                contentScale = ContentScale.Crop,
+            Box(
                 modifier = Modifier
                     .size(140.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
-            )
+                    .background(colorFondo),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = inicial,
+                    color = Color.White,
+                    fontSize = 64.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
             IconButton(
                 onClick = { /* TODO: Lógica para cambiar la foto de perfil */ },
@@ -101,42 +102,86 @@ fun Perfil(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 16.dp)
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
         ) {
-            Text(text = nombreUsuario, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-            Spacer(modifier = Modifier.width(8.dp))
-            IconButton(onClick = { /* TODO: Lógica para editar el nombre de usuario (ej. abrir un dialogo) */ }) {
-                Icon(Icons.Default.Edit, contentDescription = "Editar nombre de usuario")
+            Spacer(modifier = Modifier.width(48.dp))
+
+            if (isEditingNombre) {
+                TextField(
+                    value = nombreUsuario,
+                    onValueChange = { nombreUsuario = it },
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+                    modifier = Modifier.width(200.dp)
+                )
+            } else {
+                Text(
+                    text = nombreUsuario,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            IconButton(
+                onClick = { 
+                    if (isEditingNombre) {
+                        onActualizarNombre(nombreUsuario)
+                    }
+                    isEditingNombre = !isEditingNombre 
+                },
+                modifier = Modifier.size(48.dp)
+            ) {
+                Icon(
+                    imageVector = if (isEditingNombre) Icons.Default.Check else Icons.Default.Edit,
+                    contentDescription = if (isEditingNombre) "Guardar nombre" else "Editar nombre"
+                )
             }
         }
 
-        Text(text = stringResource(R.string.Correo_electronico), fontSize = 22.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = correo,
-            onValueChange = { correo = it },
-            modifier = Modifier.fillMaxWidth(),
-            readOnly = false // O puedes ponerlo en true y habilitarlo al pulsar un botón
+        Text(
+            text = stringResource(R.string.Correo_electronico),
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { /* TODO: Lógica para actualizar el correo */ },
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextField(
+            value = nuevoCorreo,
+            onValueChange = { nuevoCorreo = it },
             modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = { onActualizarCorreo(nuevoCorreo)
+                      nuevoCorreo = "" },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = nuevoCorreo.isNotEmpty()
         ) {
             Text(text = stringResource(R.string.Actualizar_correo))
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(text = stringResource(R.string.contrasenha), fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = stringResource(R.string.contrasenha),
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         CampoContrasenha(
             valor = nuevaContrasenha,
             onValorCambiado = { nuevaContrasenha = it },
             label = stringResource(R.string.Nueva_contrasenha)
-
         )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         CampoContrasenha(
@@ -155,24 +200,31 @@ fun Perfil(
                 fontSize = 12.sp
             )
         }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Boton(
-            stringResource(R.string.Actualizar_contrasenha), onClick = { /* TODO: Lógica para actualizar la contraseña */ },
+            stringResource(R.string.Actualizar_contrasenha),
+            onClick = { 
+                onActualizarContrasenha(nuevaContrasenha)
+                nuevaContrasenha = ""
+                repetirContrasenha = ""
+            },
             enabled = contrasenhasCoinciden && nuevaContrasenha.isNotEmpty()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
         Boton(
-            stringResource(R.string.Eliminar_cuenta), onClick = { /* TODO: Lógica para eliminar la cuenta */ },
+            stringResource(R.string.Eliminar_cuenta),
+            onClick = { onEliminarCuenta() },
             enabled = true
         )
-
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PerfilPreview() {
-    Perfil()
+    Perfil(nombreUsuarioInicial = "Usuario de Prueba")
 }
