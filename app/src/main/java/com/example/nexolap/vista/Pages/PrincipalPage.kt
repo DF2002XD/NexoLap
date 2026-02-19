@@ -1,74 +1,53 @@
 package com.example.nexolap.vista.Pages
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.nexolap.Data.ListaData
-import com.example.nexolap.vista.myComponents.ButtomAppBarNav
 import com.example.nexolap.vista.myComponents.ListHorizontal
-import com.example.nexolap.vista.myComponents.TopAppTitle
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.example.nexolap.viewmodel.vm.PrincipalPageVM
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-/**
- * Función Composable que representa la pantalla principal o "página principal" de la aplicación.
- *
- * Esta pantalla está estructurada con un diseño de [Scaffold], proporcionando una estructura
- * consistente con una barra de aplicación superior, una barra de navegación inferior y el área
- * de contenido principal. El área de contenido muestra varias listas horizontales de elementos,
- * como "Más Vendidos", "Populares" y "Nuevos Lanzamientos", utilizando un [LazyColumn].
- *
- * @param modifier Un [Modifier] que se aplicará al diseño raíz de la página.
- */
+
 @Composable
 fun PrincipalPage(
     modifier: Modifier = Modifier,
-    onHomeClick: () -> Unit = {},
-    onSearchClick: () -> Unit = {},
-    onProfileClick: () -> Unit = {},
+    onOrdenadorClick: (Int) -> Unit = {},
     vm: PrincipalPageVM = viewModel()
 ) {
     val uiState by vm.uiState.collectAsState()
     vm.loadData()
-    Scaffold(
-        topBar = {
-            TopAppTitle(
-                title = "NexoLap"
-            )
-        },
-        bottomBar = {
-            ButtomAppBarNav(
-                onHomeClick = onHomeClick,
-                onSearchClick = onSearchClick,
-                onProfileClick = onProfileClick
+
+    LazyColumn(modifier = modifier) {
+        item {
+            ListHorizontal(
+                listaData = ListaData("Más Vendidos"),
+                ordenadores = uiState.listaOrdenadores,
+                onOrdenadorClick = { ordenadorId ->
+                    onOrdenadorClick(ordenadorId)
+                }
             )
         }
-
-    ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            item {
-                ListHorizontal(
-                    listaData = ListaData("Más Vendidos"),
-                    ordenadores = uiState.listaOrdenadores
-                )
-            }
-            item {
-                ListHorizontal(
-                    listaData = ListaData("Populares"),
-                    ordenadores = uiState.listaOrdenadores
-                )
-            }
-            item {
-                ListHorizontal(
-                    listaData = ListaData("Nuevos Lanzamientos"),
-                    ordenadores = uiState.listaOrdenadores
-                )
-            }
+        item {
+            ListHorizontal(
+                listaData = ListaData("Populares"),
+                ordenadores = uiState.listaOrdenadores,
+                onOrdenadorClick = { ordenadorId ->
+                    onOrdenadorClick(ordenadorId)
+                }
+            )
+        }
+        item {
+            ListHorizontal(
+                listaData = ListaData("Nuevos Lanzamientos"),
+                ordenadores = uiState.listaOrdenadores,
+                onOrdenadorClick = { ordenadorId ->
+                    onOrdenadorClick(ordenadorId)
+                }
+            )
         }
     }
 }

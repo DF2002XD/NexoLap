@@ -22,18 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.R
 
-/**
- * Un campo de texto personalizable para introducir contraseñas.
- *
- * Este componente incluye una etiqueta, un campo de texto y un icono para alternar la visibilidad de la contraseña.
- * El estado de visibilidad de la contraseña se gestiona internamente.
- *
- * @param label El texto que se mostrará como etiqueta encima del campo de texto.
- * @param valor El valor actual del campo de contraseña.
- * @param onValorCambiado El callback que se invoca cuando el valor del campo de texto cambia.
- * @param modifier El [Modifier] que se aplicará al componente `TextField`. Por defecto es un [Modifier] vacío.
- * @param esError Indica si el campo de texto debe mostrarse en estado de error. Por defecto es `false`.
- */
+
 @Composable
 fun CampoContrasenha(
     label: String,
@@ -54,7 +43,10 @@ fun CampoContrasenha(
         visualTransformation = if (esVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
-            val icono = if (esVisible) painterResource(id = R.drawable.outline_visibility_24) else painterResource(id = R.drawable.outline_visibility_off_24)
+            val icono =
+                if (esVisible) painterResource(id = R.drawable.outline_visibility_24) else painterResource(
+                    id = R.drawable.outline_visibility_off_24
+                )
             val descripcion = if (esVisible) "Ocultar contraseña" else "Mostrar contraseña"
             IconButton(onClick = { esVisible = !esVisible }) {
                 Icon(painter = icono, contentDescription = descripcion)

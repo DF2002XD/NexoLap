@@ -21,15 +21,6 @@ import com.example.nexolap.Data.Ordenador
 import com.example.nexolap.R
 
 
-/**
- * Un Composable que muestra una tarjeta vertical para un ordenador (`Ordenador`).
- * La tarjeta consiste en una imagen en la parte superior y el nombre del ordenador debajo.
- * Toda la tarjeta es clicable.
- *
- * @param ordenador El objeto de datos [Ordenador] que se mostrará en la tarjeta. Contiene
- *   el nombre y el ID del recurso para la imagen principal.
- * @param onClick Una función lambda que se ejecutará cuando se haga clic en la tarjeta.
- */
 @Composable
 fun TarjetaVertical(ordenador: Ordenador, onClick: () -> Unit) {
     var clicado by remember { mutableStateOf(true) }
@@ -51,15 +42,6 @@ fun TarjetaVertical(ordenador: Ordenador, onClick: () -> Unit) {
 }
 
 
-/**
- * Un Composable que muestra una tarjeta horizontal para un ordenador (`Ordenador`).
- * La tarjeta consiste en una imagen a la izquierda y el nombre del ordenador a la derecha.
- * Toda la tarjeta es clicable.
- *
- * @param ordenador El objeto de datos [Ordenador] que se mostrará en la tarjeta. Contiene
- *   el nombre y el ID del recurso para la imagen principal.
- * @param onClick Una función lambda que se ejecutará cuando se haga clic en la tarjeta.
- */
 @Composable
 fun TarjetaHorizontal(ordenador: Ordenador, onClick: () -> Unit) {
     var clicado by remember { mutableStateOf(true) }

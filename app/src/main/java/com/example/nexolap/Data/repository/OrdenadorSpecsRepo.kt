@@ -2,7 +2,7 @@ package com.example.nexolap.Data.repository
 
 import com.example.nexolap.modelo.OrdenadorSpecsDTO
 
-class OrdenadorSpecsRepo: IOrdenadorSpecsRepo {
+class OrdenadorSpecsRepo : IOrdenadorSpecsRepo {
 
     var ordenadorSpecs = ArrayList(
         listOf(

@@ -11,8 +11,18 @@ class UsuarioRepo(context: Context) : IUsuarioRepo {
     companion object {
         var usuario = ArrayList(
             listOf(
-                UsuarioDTO(id = 0, nombre = "Admin", correo = "admin@gmail.com", contraseña = "admin"),
-                UsuarioDTO(id = 1, nombre = "Usuario", correo = "usuario@gmail.com", contraseña = "usuario")
+                UsuarioDTO(
+                    id = 0,
+                    nombre = "Admin",
+                    correo = "admin@gmail.com",
+                    contraseña = "admin"
+                ),
+                UsuarioDTO(
+                    id = 1,
+                    nombre = "Usuario",
+                    correo = "usuario@gmail.com",
+                    contraseña = "usuario"
+                )
             )
         )
         var currentUser: UsuarioDTO? = null
@@ -31,7 +41,8 @@ class UsuarioRepo(context: Context) : IUsuarioRepo {
         }
 
         fun getInstance(): UsuarioRepo {
-            return INSTANCE ?: throw IllegalStateException("UsuarioRepo no inicializado. Llama a UsuarioRepo.init(context) en tu Activity.")
+            return INSTANCE
+                ?: throw IllegalStateException("UsuarioRepo no inicializado. Llama a UsuarioRepo.init(context) en tu Activity.")
         }
     }
 

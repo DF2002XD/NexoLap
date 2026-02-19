@@ -19,7 +19,6 @@ class AppNavigationVM() : ViewModel() {
 
     fun checkUserSession() {
         viewModelScope.launch {
-            // Comprobamos si hay una sesión guardada en SharedPreferences a través del repo
             val currentUser = userRepo.getCurrentUser()
 
             if (currentUser != null) {
@@ -40,5 +39,15 @@ class AppNavigationVM() : ViewModel() {
                 }
             }
         }
+    }
+
+    fun logout(onSuccess: () -> Unit) {
+        userRepo.loggoutUSer(
+            onSucess = {
+                _uiState.update { it.copy(isUserLoggedIn = false) }
+                onSuccess()
+            },
+            onError = {}
+        )
     }
 }

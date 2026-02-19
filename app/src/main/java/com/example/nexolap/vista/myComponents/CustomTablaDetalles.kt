@@ -17,17 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nexolap.Data.Especificacion
 import com.example.nexolap.viewmodel.uistate.especificacionUIState1
 
-/**
- * Un composable que muestra una tabla de especificaciones de producto.
- * La tabla consta de dos columnas: "Especificación" y "Detalle".
- * Incluye una fila de cabecera y colorea las filas de datos de forma alterna para mejorar la legibilidad.
- *
- * @param especificaciones Una lista de objetos [Especificacion] que contienen los datos a mostrar.
- *                         Cada objeto representa una fila en la tabla.
- */
+
 @Composable
 fun TablaEspecificaciones(especificaciones: List<especificacionUIState1>) {
     Column(
@@ -68,16 +60,7 @@ fun TablaEspecificaciones(especificaciones: List<especificacionUIState1>) {
     }
 }
 
-/**
- * Un composable que representa una única celda dentro de una fila de una tabla.
- * Muestra texto y su apariencia se puede personalizar para celdas de encabezado o de datos.
- * Este composable debe usarse dentro de un [RowScope], normalmente como hijo de un [Row].
- *
- * @param text El contenido de texto que se mostrará en la celda.
- * @param weight El ancho relativo de la celda dentro de la fila. Determina cuánto espacio horizontal ocupa la celda.
- * @param isHeader Una bandera booleana para indicar si esta celda es parte del encabezado de la tabla.
- *                 Si es verdadero, el texto se mostrará en negrita y con un color diferente para distinguirlo. El valor por defecto es falso.
- */
+
 @Composable
 fun RowScope.TableCell(
     text: String,
@@ -97,7 +80,7 @@ fun RowScope.TableCell(
 
 @Preview
 @Composable
-fun TablaEspecificacionesPreview(){
+fun TablaEspecificacionesPreview() {
     TablaEspecificaciones(
         especificaciones = listOf(
             especificacionUIState1(1, "Procesador", "Intel Core i5-12400H"),

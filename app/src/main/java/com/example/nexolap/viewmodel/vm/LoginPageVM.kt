@@ -1,7 +1,6 @@
 package com.example.nexolap.viewmodel.vm
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nexolap.Data.repository.UsuarioRepo
 import com.example.nexolap.modelo.UsuarioDTO
@@ -12,12 +11,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginPageVM(application: Application) : AndroidViewModel(application) {
+class LoginPageVM : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginPageUIState())
     val uiState: StateFlow<LoginPageUIState> = _uiState.asStateFlow()
 
-    private val repo = UsuarioRepo(application)
+    private val repo = UsuarioRepo.getInstance()
 
     fun onKeepLoggedChange(keepLogged: Boolean) {
         _uiState.update { it.copy(keepLogged = keepLogged) }
@@ -26,7 +25,16 @@ class LoginPageVM(application: Application) : AndroidViewModel(application) {
     fun login(correo: String, contrasenha: String, onSuccess: (UsuarioDTO) -> Unit) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-            
+
+            val existeUsuario = UsuarioRepo.usuario.any { it.correo == correo }
+
+            if (!existeUsuario) {
+                _uiState.update {
+                    it.copy(isLoading = false, errorMessage = "No tiene cuenta")
+                }
+                return@launch
+            }
+
             repo.loginUser(
                 correo = correo,
                 contrasenha = contrasenha,
@@ -36,14 +44,14 @@ class LoginPageVM(application: Application) : AndroidViewModel(application) {
                     onSuccess(usuario)
                 },
                 onError = {
-                    _uiState.update { 
-                        it.copy(isLoading = false, errorMessage = "Correo o contraseña incorrectos")
+                    _uiState.update {
+                        it.copy(isLoading = false, errorMessage = "Contraseña incorrecta")
                     }
                 }
             )
         }
     }
-    
+
     fun resetError() {
         _uiState.update { it.copy(errorMessage = null) }
     }

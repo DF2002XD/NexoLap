@@ -2,10 +2,9 @@ package com.example.nexolap.Data.repository
 
 import com.example.nexolap.modelo.EspecificacionDTO
 
+class EspecificacionRepo : IEspecificacionRepo {
 
-class EspecificacionRepo : IEspecificacionRepo{
-
-    companion object{
+    companion object {
         var specs = ArrayList(
             listOf(
                 //Apple MacBook Air 13 (ID Ordenador: 0)
@@ -19,8 +18,16 @@ class EspecificacionRepo : IEspecificacionRepo{
                     "Memoria RAM",
                     "8 GB de memoria unificada (ampliable a 16 GB o 24 GB)"
                 ),
-                EspecificacionDTO(2, "Almacenamiento", "256 GB SSD (ampliable a 512 GB, 1 TB o 2 TB)"),
-                EspecificacionDTO(3, "Pantalla", "13,6 pulgadas Liquid Retina con True Tone, 500 nits"),
+                EspecificacionDTO(
+                    2,
+                    "Almacenamiento",
+                    "256 GB SSD (ampliable a 512 GB, 1 TB o 2 TB)"
+                ),
+                EspecificacionDTO(
+                    3,
+                    "Pantalla",
+                    "13,6 pulgadas Liquid Retina con True Tone, 500 nits"
+                ),
                 EspecificacionDTO(4, "Batería", "Hasta 18 horas de reproducción de vídeo"),
                 EspecificacionDTO(
                     5,
@@ -35,8 +42,16 @@ class EspecificacionRepo : IEspecificacionRepo{
                     "Procesador",
                     "Chip M3 Pro de Apple con CPU de hasta 12 núcleos y GPU de hasta 18 núcleos"
                 ),
-                EspecificacionDTO(8, "Memoria RAM", "18 GB de memoria unificada (ampliable a 36 GB)"),
-                EspecificacionDTO(9, "Almacenamiento", "512 GB SSD (ampliable a 1 TB, 2 TB o 4 TB)"),
+                EspecificacionDTO(
+                    8,
+                    "Memoria RAM",
+                    "18 GB de memoria unificada (ampliable a 36 GB)"
+                ),
+                EspecificacionDTO(
+                    9,
+                    "Almacenamiento",
+                    "512 GB SSD (ampliable a 1 TB, 2 TB o 4 TB)"
+                ),
                 EspecificacionDTO(
                     10,
                     "Pantalla",

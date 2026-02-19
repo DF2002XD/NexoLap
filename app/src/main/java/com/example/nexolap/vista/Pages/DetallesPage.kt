@@ -1,8 +1,6 @@
 package com.example.nexolap.vista.Pages
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,11 +11,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nexolap.viewmodel.vm.DetallesPageVM
 import com.example.nexolap.vista.myComponents.Detalles
-import com.example.nexolap.vista.myComponents.TopAppTitle
 
 
 @Composable
-fun DetallesPage(modifier: Modifier = Modifier,ordenadorId : Int, vm: DetallesPageVM = viewModel()) {
+fun DetallesPage(
+    modifier: Modifier = Modifier,
+    ordenadorId: Int,
+    vm: DetallesPageVM = viewModel()
+) {
 
     val ordenadorState by vm.ordenadorState.collectAsState()
     val especificacionesState by vm.especificacionesState.collectAsState()
@@ -26,29 +27,20 @@ fun DetallesPage(modifier: Modifier = Modifier,ordenadorId : Int, vm: DetallesPa
 
     vm.getDetalles(ordenadorId)
 
-    Scaffold(
-        topBar = {
-            TopAppTitle(
-                title = "",
-                onBackClick = { /* Acción al hacer clic en el ícono de retroceso */ }
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val ordenador = ordenadorState?.listaOrdenadores?.firstOrNull()
+        if (ordenador != null && relacionesState.listaOrdenadorSpecs.isNotEmpty()) {
+            Detalles(
+                ordenador = ordenador,
+                especificaciones = especificacionesState.listaEspecificaciones
             )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val ordenador = ordenadorState?.listaOrdenadores?.firstOrNull()
-            if (ordenador != null && relacionesState.listaOrdenadorSpecs.isNotEmpty()) {
-                Detalles(
-                    ordenador = ordenador,
-                    especificaciones = especificacionesState.listaEspecificaciones
-                )
-            }else if (ordenador != null) {
-                Text(text = "Este ordenador no tiene especificaciones registradas.")
-            }else {
-                Text(text = "Este ordenador no existe.")
-            }
+        } else if (ordenador != null) {
+            Text(text = "Este ordenador no tiene especificaciones registradas.")
+        } else {
+            Text(text = "Este ordenador no existe.")
         }
     }
 }

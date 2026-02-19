@@ -30,7 +30,7 @@ class DetallesPageVM : ViewModel() {
     val ordenadorSpecsRepo: OrdenadorSpecsRepo = OrdenadorSpecsRepo()
 
     fun getDetalles(id: Int) {
-        if(_ordenadorState.value.listaOrdenadores.any { it.id == id }) return
+        if (_ordenadorState.value.listaOrdenadores.any { it.id == id }) return
 
         ordenadorRepo.read(id, onSucess = { dto ->
             dto?.let {

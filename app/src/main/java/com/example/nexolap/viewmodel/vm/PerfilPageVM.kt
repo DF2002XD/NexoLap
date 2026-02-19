@@ -1,7 +1,7 @@
 package com.example.nexolap.viewmodel.vm
 
-import android.app.Application
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import com.example.nexolap.Data.repository.UsuarioRepo
 import com.example.nexolap.modelo.UsuarioDTO
@@ -16,7 +16,10 @@ class PerfilPageVM : ViewModel() {
     private val _uiState = MutableStateFlow(ListaUsuarioUIState1())
     val uiState: StateFlow<ListaUsuarioUIState1> = _uiState.asStateFlow()
 
-    private val repo: UsuarioRepo = UsuarioRepo(Application())
+    private val repo: UsuarioRepo = UsuarioRepo.getInstance()
+
+    private val _colorPerfil = MutableStateFlow(Color.Gray)
+    val colorPerfil: StateFlow<Color> = _colorPerfil.asStateFlow()
 
     private val coloresFondo = listOf(
         Color(0xFFEF5350), Color(0xFFEC407A), Color(0xFFAB47BC),
@@ -27,13 +30,9 @@ class PerfilPageVM : ViewModel() {
         Color(0xFFFF7043)
     )
 
-    val colorPerfil: Color = coloresFondo.random()
-
-    /**
-     * Obtiene los datos de un usuario específico por su ID.
-     */
     fun obtenerUsuario(id: Int) {
-        repo.read(id,
+        repo.read(
+            id,
             onSucess = { dto ->
                 dto?.let {
                     _uiState.value = ListaUsuarioUIState1(
@@ -41,6 +40,17 @@ class PerfilPageVM : ViewModel() {
                             UsuarioUIState1(it.id, it.nombre, it.correo, it.contraseña)
                         )
                     )
+
+                    if (it.color == 0) {
+                        val nuevoColor = coloresFondo.random()
+                        it.color = nuevoColor.toArgb()
+                        repo.update(it, {
+
+                        }, {})
+                        _colorPerfil.value = nuevoColor
+                    } else {
+                        _colorPerfil.value = Color(it.color)
+                    }
                 }
             },
             onError = {}
@@ -50,7 +60,13 @@ class PerfilPageVM : ViewModel() {
     fun actualizarNombre(id: Int, nuevoNombre: String) {
         val userUI = _uiState.value.listaUsuarios.find { it.id == id }
         userUI?.let {
-            val dto = UsuarioDTO(it.id, nuevoNombre, it.correo, it.contraseña)
+            val dto = UsuarioDTO(
+                it.id,
+                nuevoNombre,
+                it.correo,
+                it.contraseña,
+                color = _colorPerfil.value.toArgb()
+            )
             repo.update(dto, onSucess = { obtenerUsuario(id) }, onError = {})
         }
     }
@@ -58,7 +74,13 @@ class PerfilPageVM : ViewModel() {
     fun actualizarCorreo(id: Int, nuevoCorreo: String) {
         val userUI = _uiState.value.listaUsuarios.find { it.id == id }
         userUI?.let {
-            val dto = UsuarioDTO(it.id, it.nombre, nuevoCorreo, it.contraseña)
+            val dto = UsuarioDTO(
+                it.id,
+                it.nombre,
+                nuevoCorreo,
+                it.contraseña,
+                color = _colorPerfil.value.toArgb()
+            )
             repo.update(dto, onSucess = { obtenerUsuario(id) }, onError = {})
         }
     }
@@ -66,7 +88,13 @@ class PerfilPageVM : ViewModel() {
     fun actualizarContrasenha(id: Int, nuevaContrasenha: String) {
         val userUI = _uiState.value.listaUsuarios.find { it.id == id }
         userUI?.let {
-            val dto = UsuarioDTO(it.id, it.nombre, it.correo, nuevaContrasenha)
+            val dto = UsuarioDTO(
+                it.id,
+                it.nombre,
+                it.correo,
+                nuevaContrasenha,
+                color = _colorPerfil.value.toArgb()
+            )
             repo.update(dto, onSucess = { obtenerUsuario(id) }, onError = {})
         }
     }

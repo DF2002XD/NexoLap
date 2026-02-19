@@ -14,7 +14,7 @@ class PrincipalPageVM : ViewModel() {
 
     val repo: OrdenadorRepo = OrdenadorRepo()
 
-    fun loadData(){
+    fun loadData() {
         repo.readAll(
             {
                 _uiState.value = ListaOrdenadoresUIState1(it.map {
@@ -25,7 +25,7 @@ class PrincipalPageVM : ViewModel() {
                     )
                 })
             },
-            onError ={
+            onError = {
 
             }
         )

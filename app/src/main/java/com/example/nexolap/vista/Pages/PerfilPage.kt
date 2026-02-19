@@ -1,9 +1,9 @@
 package com.example.nexolap.vista.Pages
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -11,62 +11,48 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nexolap.viewmodel.vm.PerfilPageVM
-import com.example.nexolap.vista.myComponents.ButtomAppBarNav
 import com.example.nexolap.vista.myComponents.Perfil
 
-/**
- * Un Composable que representa la pantalla del perfil de usuario.
- *
- * @param userId El ID del usuario que se va a mostrar.
- * @param modifier El modificador que se aplicará al diseño.
- * @param vm El ViewModel que mantiene el estado del perfil.
- */
+
 @Composable
 fun PerfilPage(
     userId: Int,
     modifier: Modifier = Modifier,
-    onHomeClick: () -> Unit = {},
-    onSearchClick: () -> Unit = {},
-    onProfileClick: () -> Unit = {},
+    onAccountDeleted: () -> Unit = {},
     vm: PerfilPageVM = viewModel()
 ) {
     val uiState by vm.uiState.collectAsState()
+    val colorPerfil by vm.colorPerfil.collectAsState()
 
-    // Cargamos el usuario cuando cambia el userId
     LaunchedEffect(userId) {
         vm.obtenerUsuario(userId)
     }
 
     val usuarioActual = uiState.listaUsuarios.firstOrNull()
 
-    Scaffold(
+    Column(
         modifier = modifier,
-        bottomBar = {
-            ButtomAppBarNav(
-                onHomeClick = onHomeClick,
-                onSearchClick = onSearchClick,
-                onProfileClick = onProfileClick,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (usuarioActual != null) {
+            Perfil(
+                nombreUsuarioInicial = usuarioActual.nombre,
+                colorFondo = colorPerfil,
+                onActualizarNombre = { vm.actualizarNombre(usuarioActual.id, it) },
+                onActualizarCorreo = { vm.actualizarCorreo(usuarioActual.id, it) },
+                onActualizarContrasenha = { vm.actualizarContrasenha(usuarioActual.id, it) },
+                onActualizarColor = { vm.obtenerUsuario(usuarioActual.id) },
+                onEliminarCuenta = {
+                    vm.eliminarUsuario(usuarioActual.id) {
+                        onAccountDeleted()
+                    }
+                }
             )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (usuarioActual != null) {
-                Perfil(
-                    nombreUsuarioInicial = usuarioActual.nombre,
-                    colorFondo = vm.colorPerfil,
-                    onActualizarNombre = { vm.actualizarNombre(usuarioActual.id, it) },
-                    onActualizarCorreo = { vm.actualizarCorreo(usuarioActual.id, it) },
-                    onActualizarContrasenha = { vm.actualizarContrasenha(usuarioActual.id, it) },
-                    onEliminarCuenta = { vm.eliminarUsuario(usuarioActual.id) { /* Navegar fuera */ } }
-                )
-            } else {
-                Text(text = "Cargando perfil...", modifier = Modifier.padding(16.dp))
+        } else {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
         }
     }

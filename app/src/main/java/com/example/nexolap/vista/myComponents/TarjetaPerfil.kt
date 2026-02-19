@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,7 @@ fun Perfil(
     onActualizarNombre: (String) -> Unit = {},
     onActualizarCorreo: (String) -> Unit = {},
     onActualizarContrasenha: (String) -> Unit = {},
+    onActualizarColor: () -> Unit = {},
     onEliminarCuenta: () -> Unit = {}
 ) {
     var nombreUsuario by remember { mutableStateOf(nombreUsuarioInicial) }
@@ -59,7 +61,11 @@ fun Perfil(
     var isEditingNombre by remember { mutableStateOf(false) }
     val contrasenhasCoinciden = nuevaContrasenha == repetirContrasenha
 
-    // Obtenemos la inicial del nombre actual
+    // Sincronizamos el nombre con el valor del ViewModel
+    LaunchedEffect(nombreUsuarioInicial) {
+        nombreUsuario = nombreUsuarioInicial
+    }
+
     val inicial = if (nombreUsuario.isNotEmpty()) nombreUsuario.take(1).uppercase() else "?"
 
     Column(
@@ -87,7 +93,7 @@ fun Perfil(
             }
 
             IconButton(
-                onClick = { /* TODO: Lógica para cambiar la foto de perfil */ },
+                onClick = onActualizarColor,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .offset(x = 10.dp, y = 10.dp)
@@ -96,7 +102,7 @@ fun Perfil(
                         CircleShape
                     )
             ) {
-                Icon(Icons.Default.Edit, contentDescription = "Editar foto de perfil")
+                Icon(Icons.Default.Edit, contentDescription = "Cambiar color de perfil")
             }
         }
 
@@ -126,11 +132,11 @@ fun Perfil(
             }
 
             IconButton(
-                onClick = { 
+                onClick = {
                     if (isEditingNombre) {
                         onActualizarNombre(nombreUsuario)
                     }
-                    isEditingNombre = !isEditingNombre 
+                    isEditingNombre = !isEditingNombre
                 },
                 modifier = Modifier.size(48.dp)
             ) {
@@ -158,8 +164,10 @@ fun Perfil(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { onActualizarCorreo(nuevoCorreo)
-                      nuevoCorreo = "" },
+            onClick = {
+                onActualizarCorreo(nuevoCorreo)
+                nuevoCorreo = ""
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = nuevoCorreo.isNotEmpty()
         ) {
@@ -205,7 +213,7 @@ fun Perfil(
 
         Boton(
             stringResource(R.string.Actualizar_contrasenha),
-            onClick = { 
+            onClick = {
                 onActualizarContrasenha(nuevaContrasenha)
                 nuevaContrasenha = ""
                 repetirContrasenha = ""

@@ -8,7 +8,13 @@ interface IUsuarioRepo {
     fun update(usuarioDTO: UsuarioDTO, onSucess: () -> Unit, onError: () -> Unit)
     fun delete(id: Int, onSucess: () -> Unit, onError: () -> Unit)
 
-    fun loginUser(correo: String, contrasenha: String, keepLogged: Boolean, onSucess: (UsuarioDTO) -> Unit, onError: () -> Unit)
+    fun loginUser(
+        correo: String,
+        contrasenha: String,
+        keepLogged: Boolean,
+        onSucess: (UsuarioDTO) -> Unit,
+        onError: () -> Unit
+    )
 
     fun loggoutUSer(onSucess: () -> Unit, onError: () -> Unit)
 

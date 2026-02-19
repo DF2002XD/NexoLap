@@ -22,28 +22,25 @@ import com.example.nexolap.R
 import com.example.nexolap.viewmodel.uistate.OrdenadorUIState1
 import com.example.nexolap.viewmodel.uistate.especificacionUIState1
 
-/**
- * Composable que muestra la pantalla de detalles de un ordenador específico.
- * Busca el ordenador por su ID en una lista predefinida y muestra su imagen,
- * nombre y una tabla con sus especificaciones. Si el ordenador no se encuentra,
- * muestra un mensaje indicándolo.
- *
- * @param ordenadorId El ID del ordenador del cual se mostrarán los detalles.
- */
+
 @Composable
-fun Detalles(ordenador: OrdenadorUIState1,
-             especificaciones: List<especificacionUIState1>) {
+fun Detalles(
+    ordenador: OrdenadorUIState1,
+    especificaciones: List<especificacionUIState1>,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Image(
             painter = painterResource(id = ordenador.imagenPrincipal),
             contentDescription = ordenador.nombre,
-            modifier = Modifier.fillMaxWidth(0.8f).height(200.dp)
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(200.dp)
         )
         Text(text = ordenador.nombre, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(32.dp))
@@ -61,5 +58,5 @@ fun DetallesPreview() {
         especificaciones = listOf(
             especificacionUIState1(1, "Procesador", "Intel Core i5-12400H")
         )
-)
+    )
 }
