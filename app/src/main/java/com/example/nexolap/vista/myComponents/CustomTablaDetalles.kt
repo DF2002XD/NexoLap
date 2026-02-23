@@ -17,11 +17,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nexolap.viewmodel.uistate.especificacionUIState1
+import com.example.nexolap.viewmodel.uistate.EspecificacionUIState
 
-
+/**
+ * Composable que muestra una tabla de especificaciones técnicas con un diseño de filas alternas.
+ *
+ * La tabla consta de una cabecera fija ("Especificación" y "Detalle") y una lista de filas
+ * generadas dinámicamente a partir de una lista de estados de UI. Cada fila par tiene un
+ * fondo ligeramente resaltado para mejorar la legibilidad.
+ *
+ * @param especificaciones Lista de objetos [EspecificacionUIState] que contienen la información
+ * a mostrar en cada fila de la tabla (componente y descripción).
+ */
 @Composable
-fun TablaEspecificaciones(especificaciones: List<especificacionUIState1>) {
+fun TablaEspecificaciones(especificaciones: List<EspecificacionUIState>) {
     Column(
         modifier = Modifier.fillMaxWidth() // La tabla ahora ocupa todo el ancho
     ) {
@@ -61,6 +70,17 @@ fun TablaEspecificaciones(especificaciones: List<especificacionUIState1>) {
 }
 
 
+/**
+ * Dibuja una celda individual dentro de una fila de tabla.
+ *
+ * Esta función de extensión de [RowScope] utiliza el modificador `weight` para distribuir
+ * el espacio horizontal de forma proporcional dentro de un [Row].
+ *
+ * @param text El contenido de texto que se mostrará en la celda.
+ * @param weight El peso proporcional que determina el ancho de la celda respecto a las demás.
+ * @param isHeader Indica si la celda debe estilizarse como encabezado (texto en negrita y color resaltado).
+ *                 Por defecto es `false`.
+ */
 @Composable
 fun RowScope.TableCell(
     text: String,
@@ -83,10 +103,10 @@ fun RowScope.TableCell(
 fun TablaEspecificacionesPreview() {
     TablaEspecificaciones(
         especificaciones = listOf(
-            especificacionUIState1(1, "Procesador", "Intel Core i5-12400H"),
-            especificacionUIState1(2, "Memoria", "16 GB RAM"),
-            especificacionUIState1(3, "Disco Duro", "512 GB SSD"),
-            especificacionUIState1(4, "Tarjeta Gráfica", "NVIDIA GeForce RTX 3050")
+            EspecificacionUIState("1", "Procesador", "Intel Core i5-12400H"),
+            EspecificacionUIState("2", "Memoria", "16 GB RAM"),
+            EspecificacionUIState("3", "Disco Duro", "512 GB SSD"),
+            EspecificacionUIState("4", "Tarjeta Gráfica", "NVIDIA GeForce RTX 3050")
         )
     )
 }

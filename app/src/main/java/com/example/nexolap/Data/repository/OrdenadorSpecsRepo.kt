@@ -2,6 +2,13 @@ package com.example.nexolap.Data.repository
 
 import com.example.nexolap.modelo.OrdenadorSpecsDTO
 
+/**
+ * Repositorio encargado de gestionar la relación entre ordenadores y sus especificaciones técnicas.
+ * Implementa la interfaz [IOrdenadorSpecsRepo] y proporciona un conjunto de datos iniciales
+ * simulando una fuente de datos persistente.
+ *
+ * @property ordenadorSpecs Lista mutable que contiene los objetos [OrdenadorSpecsDTO] predefinidos.
+ */
 class OrdenadorSpecsRepo : IOrdenadorSpecsRepo {
 
     var ordenadorSpecs = ArrayList(
@@ -31,16 +38,13 @@ class OrdenadorSpecsRepo : IOrdenadorSpecsRepo {
     )
 
     override fun readAll(
-        onSucess: (List<OrdenadorSpecsDTO>) -> Unit,
-        onError: () -> Unit
+        onSucess: (List<OrdenadorSpecsDTO>) -> Unit, onError: () -> Unit
     ) {
         onSucess(ordenadorSpecs)
     }
 
     override fun read(
-        id: Int,
-        onSucess: (ordenadorSpecsCrado: OrdenadorSpecsDTO?) -> Unit,
-        onError: () -> Unit
+        id: Int, onSucess: (ordenadorSpecsCrado: OrdenadorSpecsDTO?) -> Unit, onError: () -> Unit
     ) {
         onSucess(ordenadorSpecs.find { it.id_Ordenador.id == id })
 

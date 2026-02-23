@@ -23,6 +23,16 @@ import androidx.compose.ui.unit.sp
 import com.example.nexolap.R
 
 
+/**
+ * Un componente de entrada de texto personalizado para contraseñas que incluye la funcionalidad
+ * de alternar la visibilidad del texto.
+ *
+ * @param label El texto que se mostrará como etiqueta encima del campo de entrada.
+ * @param valor El valor actual del texto en el campo.
+ * @param onValorCambiado Función de devolución de llamada que se ejecuta cuando el texto cambia.
+ * @param modifier [Modifier] que se aplicará al diseño del campo de texto.
+ * @param esError Indica si el campo debe mostrar un estado de error visual.
+ */
 @Composable
 fun CampoContrasenha(
     label: String,

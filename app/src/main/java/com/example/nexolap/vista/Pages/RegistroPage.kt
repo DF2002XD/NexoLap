@@ -18,6 +18,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nexolap.viewmodel.vm.RegistroPageVM
 import com.example.nexolap.vista.myComponents.Registro
 
+/**
+ * Pantalla de registro de usuario que permite crear una nueva cuenta en la aplicación.
+ *
+ * Esta función composable gestiona el estado de la interfaz de usuario a través de un ViewModel,
+ * permitiendo al usuario ingresar sus datos, validar la información y procesar el registro.
+ * Muestra un indicador de carga durante el proceso y mensajes de error si la operación falla.
+ *
+ * @param modifier Modificador para aplicar estilos o diseño a la raíz de la pantalla.
+ * @param onNavigateToLogin Función de retorno que se ejecuta para navegar de vuelta a la pantalla de inicio de sesión.
+ * @param vm El ViewModel que contiene la lógica de negocio y el estado de esta pantalla.
+ */
 @Composable
 fun RegistroPage(
     modifier: Modifier = Modifier,

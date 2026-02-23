@@ -3,6 +3,18 @@ package com.example.nexolap.Data.repository
 import android.content.Context
 import com.example.nexolap.modelo.UsuarioDTO
 
+/**
+ * Repositorio encargado de la gestión de usuarios y el manejo de sesiones en la aplicación.
+ *
+ * Esta clase implementa [IUsuarioRepo] y proporciona funcionalidades para realizar operaciones
+ * CRUD sobre una lista de usuarios en memoria, además de persistir la sesión del usuario
+ * actual utilizando [android.content.SharedPreferences].
+ *
+ * Implementa el patrón Singleton, por lo que debe inicializarse mediante [init] antes de
+ * ser utilizada a través de [getInstance].
+ *
+ * @property context El contexto de la aplicación utilizado para acceder a SharedPreferences.
+ */
 class UsuarioRepo(context: Context) : IUsuarioRepo {
 
     private val sharedPreferences = context.getSharedPreferences("session", Context.MODE_PRIVATE)
@@ -58,6 +70,20 @@ class UsuarioRepo(context: Context) : IUsuarioRepo {
         onSucess(usuario.find { it.id == id })
     }
 
+    override fun create(
+        usuarioDTO: UsuarioDTO,
+        onSucess: () -> Unit,
+        onError: () -> Unit
+    ) {
+        val nextId = (usuario.maxOfOrNull { it.id } ?: 0) + 1
+        val userWithId = usuarioDTO.copy(id = nextId)
+        if (usuario.add(userWithId)) {
+            onSucess()
+        } else {
+            onError()
+        }
+    }
+
     override fun update(usuarioDTO: UsuarioDTO, onSucess: () -> Unit, onError: () -> Unit) {
         val index = usuario.indexOfFirst { it.id == usuarioDTO.id }
         if (index != -1) {
@@ -111,5 +137,4 @@ class UsuarioRepo(context: Context) : IUsuarioRepo {
         }
         return null
     }
-
 }

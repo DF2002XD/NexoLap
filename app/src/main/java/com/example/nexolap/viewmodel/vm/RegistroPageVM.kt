@@ -4,18 +4,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nexolap.Data.repository.UsuarioRepo
-import com.example.nexolap.modelo.UsuarioDTO
-import com.example.nexolap.viewmodel.uistate.RegistroUIState
+import com.example.nexolap.Data.retrofit.repo.IUsuarioApiRepo
+import com.example.nexolap.Data.retrofit.repo.UsuarioApiRepo
+import com.example.nexolap.modelo.UsuarioDTORetroFit
+import com.example.nexolap.viewmodel.uistate.RegistroUIStateApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel encargado de gestionar la lógica de negocio y el estado de la pantalla de registro de usuarios.
+ *
+ * Esta clase se comunica con el repositorio [IUsuarioApiRepo] para procesar el alta de nuevos usuarios,
+ * gestiona las actualizaciones de los campos del formulario (nombre, correo, contraseñas) y asigna
+ * de forma aleatoria un color de perfil de una lista predefinida.
+ *
+ * @property uiState Flujo de estado ([StateFlow]) que expone el estado actual de la interfaz [RegistroUIStateApi].
+ * @property repo Instancia del repositorio utilizada para realizar las operaciones de persistencia de usuarios.
+ * @property coloresFondo Lista de colores disponibles para ser asignados aleatoriamente al perfil del usuario.
+ */
 class RegistroPageVM : ViewModel() {
-    private val _uiState = MutableStateFlow(RegistroUIState())
-    val uiState: StateFlow<RegistroUIState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(RegistroUIStateApi())
+    val uiState: StateFlow<RegistroUIStateApi> = _uiState.asStateFlow()
+
+    private val repo: IUsuarioApiRepo = UsuarioApiRepo.getInstance()
 
     private val coloresFondo = listOf(
         Color(0xFFEF5350), Color(0xFFEC407A), Color(0xFFAB47BC),
@@ -43,32 +57,38 @@ class RegistroPageVM : ViewModel() {
     }
 
     fun registrarUsuario(onSuccess: () -> Unit) {
-        val usuario = _uiState.value.usuario
+        val usuarioState = _uiState.value.usuario
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-            try {
-                val nextId = (UsuarioRepo.usuario.maxOfOrNull { it.id } ?: 0) + 1
 
-                val colorAleatorio = coloresFondo.random().toArgb()
-                
-                val dto = UsuarioDTO(
-                    id = nextId,
-                    nombre = usuario.UsuarioNombre,
-                    correo = usuario.UsuarioCorreo,
-                    contraseña = usuario.UsuarioContrasenha,
-                    color = colorAleatorio // Guardamos el color aquí
-                )
+            val colorAleatorio = coloresFondo.random().toArgb()
+            val dto = UsuarioDTORetroFit(
+                id = "",
+                name = usuarioState.UsuarioNombre,
+                email = usuarioState.UsuarioCorreo,
+                passwd = usuarioState.UsuarioContrasenha,
+                color = colorAleatorio
+            )
 
-                UsuarioRepo.usuario.add(dto)
-                _uiState.update { it.copy(isLoading = false, registrationSuccess = true) }
-                onSuccess()
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = "Error al registrar el usuario: ${e.message}") }
-            }
+            repo.create(
+                dto,
+                onSucess = {
+                    _uiState.update { it.copy(isLoading = false, registrationSuccess = true) }
+                    onSuccess()
+                },
+                onError = {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Error al registrar el usuario"
+                        )
+                    }
+                }
+            )
         }
     }
 
     fun resetState() {
-        _uiState.value = RegistroUIState()
+        _uiState.value = RegistroUIStateApi()
     }
 }

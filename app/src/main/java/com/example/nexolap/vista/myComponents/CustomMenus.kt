@@ -49,6 +49,14 @@ import com.exyte.animatednavbar.animation.indendshape.ShapeCornerRadius
 import com.exyte.animatednavbar.utils.noRippleClickable
 
 
+/**
+ * Un componente de TopAppBar personalizado que muestra un título y proporciona acciones opcionales de navegación y perfil.
+ *
+ * @param title El texto que se mostrará como título. Si [onBackClick] es nulo, el título se alinea al centro.
+ * @param onBackClick Callback opcional para el icono de navegación hacia atrás. Si se proporciona, se muestra el icono de flecha.
+ * @param onLogoutClick Callback opcional para la acción de "Cerrar Sesión" dentro del menú desplegable del perfil.
+ * @param onProfileDetailsClick Callback opcional para la acción de "Detalles del Perfil" dentro del menú desplegable del perfil.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppTitle(
@@ -120,6 +128,17 @@ fun TopAppTitle(
 }
 
 
+/**
+ * Una barra de navegación inferior personalizada que utiliza [AnimatedNavigationBar] para transiciones animadas.
+ *
+ * Determina automáticamente el índice del elemento seleccionado basándose en la ruta actual
+ * y proporciona botones para navegar a las secciones de inicio, búsqueda y perfil.
+ *
+ * @param currentRoute La ruta de navegación actual para determinar qué ícono debe estar activo.
+ * @param onHomeClick Acción a ejecutar cuando se selecciona el ícono de inicio.
+ * @param onSearchClick Acción a ejecutar cuando se selecciona el ícono de búsqueda.
+ * @param onProfileClick Acción a ejecutar cuando se selecciona el ícono de perfil.
+ */
 @Composable
 fun ButtomAppBarNav(
     currentRoute: String? = null,

@@ -3,6 +3,15 @@ package com.example.nexolap.Data.repository
 import com.example.nexolap.R
 import com.example.nexolap.modelo.OrdenadorDTO
 
+/**
+ * Implementación del repositorio para la gestión de datos de [OrdenadorDTO].
+ *
+ * Esta clase actúa como una fuente de datos estática que contiene una lista predefinida de
+ * ordenadores de diversas marcas (Apple, Dell, HP, Lenovo, etc.) y proporciona métodos
+ * para acceder a ellos a través de la interfaz [IOrdenadorRepo].
+ *
+ * @property ordenador Objeto compañero que mantiene la lista en memoria de los dispositivos disponibles.
+ */
 class OrdenadorRepo : IOrdenadorRepo {
 
     companion object {

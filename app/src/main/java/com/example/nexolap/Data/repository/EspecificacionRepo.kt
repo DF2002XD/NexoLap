@@ -2,6 +2,18 @@ package com.example.nexolap.Data.repository
 
 import com.example.nexolap.modelo.EspecificacionDTO
 
+/**
+ * Implementación del repositorio para la gestión y acceso a las especificaciones técnicas
+ * de los equipos ([EspecificacionDTO]).
+ *
+ * Esta clase actúa como fuente de datos local, manteniendo una lista estática de
+ * especificaciones detalladas como procesador, RAM, almacenamiento y otras características
+ * de hardware para diferentes modelos de ordenadores.
+ *
+ * @property specs Lista estática que contiene el conjunto predefinido de especificaciones.
+ * @see IEspecificacionRepo
+ * @see EspecificacionDTO
+ */
 class EspecificacionRepo : IEspecificacionRepo {
 
     companion object {
@@ -92,7 +104,6 @@ class EspecificacionRepo : IEspecificacionRepo {
             )
         )
     }
-
 
     override fun readAll(onSucess: (List<EspecificacionDTO>) -> Unit, onError: () -> Unit) {
         onSucess(specs)

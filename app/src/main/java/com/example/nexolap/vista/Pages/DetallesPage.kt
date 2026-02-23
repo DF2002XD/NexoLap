@@ -13,10 +13,21 @@ import com.example.nexolap.viewmodel.vm.DetallesPageVM
 import com.example.nexolap.vista.myComponents.Detalles
 
 
+/**
+ * Composable function that represents the details page for a specific computer.
+ *
+ * It retrieves and displays information about a computer, including its specifications,
+ * based on the provided [ordenadorId]. It manages the UI state by observing data
+ * from the [DetallesPageVM].
+ *
+ * @param modifier The [Modifier] to be applied to the layout.
+ * @param ordenadorId The unique identifier of the computer to display.
+ * @param vm The ViewModel that handles the business logic and provides the state for this page.
+ */
 @Composable
 fun DetallesPage(
     modifier: Modifier = Modifier,
-    ordenadorId: Int,
+    ordenadorId: String,
     vm: DetallesPageVM = viewModel()
 ) {
 
@@ -48,5 +59,5 @@ fun DetallesPage(
 @Preview
 @Composable
 fun DetallesPagePreview() {
-    DetallesPage(ordenadorId = 1)
+    DetallesPage(ordenadorId = "")
 }

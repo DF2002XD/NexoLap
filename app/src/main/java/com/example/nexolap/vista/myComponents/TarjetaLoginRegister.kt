@@ -30,9 +30,19 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.Data.Usuario
+import com.example.nexolap.Data.UsuarioApi
 import com.example.nexolap.R
 
 
+/**
+ * Función composable que muestra la interfaz de inicio de sesión.
+ *
+ * @param keepLogged Booleano que indica si la casilla de "mantener sesión iniciada" está marcada.
+ * @param onKeepLoggedChange Callback que se dispara cuando cambia el estado de la casilla de mantener sesión.
+ * @param errorMessage Mensaje de error opcional que se muestra en caso de un intento de inicio de sesión fallido.
+ * @param onLoginClicked Callback que se dispara al pulsar el botón de inicio de sesión, proporcionando el correo y la contraseña ingresados.
+ * @param onNavigateToRegister Callback para navegar a la pantalla de registro.
+ */
 @Composable
 fun LoginSesion(
     keepLogged: Boolean,
@@ -138,9 +148,21 @@ fun LoginSesion(
 }
 
 
+/**
+ * Función composable que muestra la interfaz de registro de nuevos usuarios.
+ *
+ * @param usuario Objeto que contiene los datos actuales del usuario en el formulario (nombre, correo, contraseña).
+ * @param repitaContrasenha Valor del campo para confirmar la contraseña.
+ * @param onNombreChange Callback que se dispara cuando cambia el valor del nombre.
+ * @param onCorreoChange Callback que se dispara cuando cambia el valor del correo electrónico.
+ * @param onContrasenhaChange Callback que se dispara cuando cambia el valor de la contraseña.
+ * @param onRepitaContrasenhaChange Callback que se dispara cuando cambia el valor de la confirmación de contraseña.
+ * @param onRegisterClicked Callback que se dispara al pulsar el botón de crear cuenta.
+ * @param onNavigateToLogin Callback para navegar a la pantalla de inicio de sesión.
+ */
 @Composable
 fun Registro(
-    usuario: Usuario,
+    usuario: UsuarioApi,
     repitaContrasenha: String,
     onNombreChange: (String) -> Unit,
     onCorreoChange: (String) -> Unit,
@@ -284,7 +306,7 @@ fun PreviewAcceso() {
 @Composable
 fun PreviewRegistro() {
     Registro(
-        usuario = Usuario(0, "", "", ""),
+        usuario = UsuarioApi("0", "", "", "", false, 0),
         repitaContrasenha = "",
         onNombreChange = {},
         onCorreoChange = {},

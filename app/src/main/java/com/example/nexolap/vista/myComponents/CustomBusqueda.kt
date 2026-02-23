@@ -19,7 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
+/**
+ * Un componente composable que muestra una barra de búsqueda personalizada.
+ *
+ * @param searchText El texto actual ingresado en el campo de búsqueda.
+ * @param onSearchTextChange Función de retorno (callback) que se ejecuta cada vez que el texto cambia,
+ * permitiendo actualizar el estado externo.
+ */
 @Composable
 fun Buscador(
     searchText: String,
@@ -55,7 +61,6 @@ fun Buscador(
 
         )
     }
-
 }
 
 @Preview

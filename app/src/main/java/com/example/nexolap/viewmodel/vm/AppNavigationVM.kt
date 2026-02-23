@@ -2,7 +2,7 @@ package com.example.nexolap.viewmodel.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nexolap.Data.repository.UsuarioRepo
+import com.example.nexolap.Data.retrofit.repo.IUsuarioApiRepo
 import com.example.nexolap.viewmodel.uistate.AppNavigationUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,44 +10,56 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel responsable de gestionar el estado de la navegación principal de la aplicación.
+ *
+ * Se encarga de la lógica para determinar el punto de entrada inicial de la aplicación
+ * basándose en el estado de la sesión del usuario (por ejemplo, redirigir a la pantalla de
+ * inicio de sesión o al panel principal) y gestiona las operaciones de cierre de sesión.
+ *
+ * @property uiState Un [StateFlow] que emite [AppNavigationUIState], representando el estado
+ * actual de la navegación y la verificación de la sesión.
+ */
 class AppNavigationVM() : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppNavigationUIState(isCheckUserSession = true))
     val uiState: StateFlow<AppNavigationUIState> = _uiState.asStateFlow()
 
-    private val userRepo: UsuarioRepo = UsuarioRepo.getInstance()
+    private val userRepo: IUsuarioApiRepo =
+        com.example.nexolap.Data.retrofit.repo.UsuarioApiRepo.getInstance()
 
     fun checkUserSession() {
         viewModelScope.launch {
-            val currentUser = userRepo.getCurrentUser()
-
-            if (currentUser != null) {
-                _uiState.update {
-                    it.copy(
-                        isCheckUserSession = false,
-                        isUserLoggedIn = true,
-                        initialRoute = "principal/${currentUser.id}"
-                    )
+            userRepo.checkStoredSession(
+                onSucess = { user ->
+                    _uiState.update {
+                        it.copy(
+                            isCheckUserSession = false,
+                            isUserLoggedIn = true,
+                            initialRoute = "principal/${user.id}"
+                        )
+                    }
+                },
+                onError = {
+                    _uiState.update {
+                        it.copy(
+                            isCheckUserSession = false,
+                            isUserLoggedIn = false,
+                            initialRoute = "login"
+                        )
+                    }
                 }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        isCheckUserSession = false,
-                        isUserLoggedIn = false,
-                        initialRoute = "login"
-                    )
-                }
-            }
+            )
         }
     }
 
-    fun logout(onSuccess: () -> Unit) {
-        userRepo.loggoutUSer(
-            onSucess = {
-                _uiState.update { it.copy(isUserLoggedIn = false) }
-                onSuccess()
-            },
-            onError = {}
-        )
-    }
+//    fun logout(onSuccess: () -> Unit) {
+//        userRepo.loggoutUSer(
+//            onSucess = {
+//                _uiState.update { it.copy(isUserLoggedIn = false) }
+//                onSuccess()
+//            },
+//            onError = {}
+//        )
+//    }
 }

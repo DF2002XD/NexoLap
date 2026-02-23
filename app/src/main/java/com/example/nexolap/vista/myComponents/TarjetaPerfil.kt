@@ -44,6 +44,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nexolap.R
 
+/**
+ * Pantalla de perfil de usuario que permite visualizar y editar la información personal.
+ *
+ * Permite al usuario cambiar su nombre, correo electrónico, contraseña y el color
+ * de fondo de su avatar.
+ *
+ * @param nombreUsuarioInicial El nombre de usuario actual para mostrar inicialmente.
+ * @param colorFondo El color de fondo del avatar circular.
+ * @param onActualizarNombre Callback que se ejecuta al guardar un nuevo nombre de usuario.
+ * @param onActualizarCorreo Callback que se ejecuta al solicitar la actualización del correo.
+ * @param onActualizarContrasenha Callback que se ejecuta al actualizar la contraseña.
+ * @param onActualizarColor Callback que se ejecuta al solicitar un cambio en el color del perfil.
+ * @param onEliminarCuenta Callback que se ejecuta al solicitar la eliminación definitiva de la cuenta.
+ */
 @Composable
 fun Perfil(
     nombreUsuarioInicial: String,

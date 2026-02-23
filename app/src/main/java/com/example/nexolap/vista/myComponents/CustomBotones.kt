@@ -10,6 +10,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 
+/**
+ * Función composable que crea un botón personalizado con un ancho y alto específicos.
+ *
+ * @param nombre El texto que se mostrará dentro del botón.
+ * @param onClick La función de callback que se ejecutará al hacer clic en el botón.
+ * @param enabled Controla el estado habilitado del botón; si es falso, el botón no responderá a la interacción.
+ */
 @Composable
 fun Boton(nombre: String, onClick: () -> Unit, enabled: Boolean) {
     Button(onClick = onClick, modifier = Modifier

@@ -18,15 +18,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nexolap.R
-import com.example.nexolap.viewmodel.uistate.OrdenadorUIState1
-import com.example.nexolap.viewmodel.uistate.especificacionUIState1
+import com.example.nexolap.viewmodel.uistate.EspecificacionUIState
+import com.example.nexolap.viewmodel.uistate.OrdenadorUIState
 
 
+/**
+ * Función composable que muestra la información detallada de un ordenador.
+ *
+ * Este componente presenta una interfaz que incluye la imagen principal del ordenador,
+ * su nombre como título y una tabla con su lista de especificaciones técnicas.
+ * El contenido permite el desplazamiento vertical (scroll).
+ *
+ * @param ordenador Estado de la interfaz que contiene los datos básicos del ordenador (nombre e imagen).
+ * @param especificaciones Lista de estados de la interfaz que representan las características técnicas a mostrar.
+ */
 @Composable
 fun Detalles(
-    ordenador: OrdenadorUIState1,
-    especificaciones: List<especificacionUIState1>,
+    ordenador: OrdenadorUIState,
+    especificaciones: List<EspecificacionUIState>,
 ) {
     Column(
         modifier = Modifier
@@ -36,7 +45,7 @@ fun Detalles(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = ordenador.imagenPrincipal),
+            painter = painterResource(id = ordenador.imagenPrincipal as Int),
             contentDescription = ordenador.nombre,
             modifier = Modifier
                 .fillMaxWidth(0.8f)
@@ -54,9 +63,9 @@ fun Detalles(
 @Composable
 fun DetallesPreview() {
     Detalles(
-        ordenador = OrdenadorUIState1(1, "asa", R.drawable.macbook_air_m2),
+        ordenador = OrdenadorUIState("1", "asa", "R.drawable.macbook_air_m2"),
         especificaciones = listOf(
-            especificacionUIState1(1, "Procesador", "Intel Core i5-12400H")
+            EspecificacionUIState("1", "Procesador", "Intel Core i5-12400H")
         )
     )
 }

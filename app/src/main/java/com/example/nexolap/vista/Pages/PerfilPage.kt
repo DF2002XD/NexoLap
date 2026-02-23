@@ -16,9 +16,21 @@ import com.example.nexolap.viewmodel.vm.PerfilPageVM
 import com.example.nexolap.vista.myComponents.Perfil
 
 
+/**
+ * Composable function that represents the profile page of a user.
+ *
+ * This page fetches and displays user information based on the provided [userId].
+ * It allows the user to update their name, email, password, and profile color,
+ * as well as delete their account.
+ *
+ * @param userId The unique identifier of the user to be displayed.
+ * @param modifier The [Modifier] to be applied to the layout.
+ * @param onAccountDeleted Callback function invoked when the user's account is successfully deleted.
+ * @param vm The [PerfilPageVM] instance that manages the state and logic for this page.
+ */
 @Composable
 fun PerfilPage(
-    userId: Int,
+    userId: String,
     modifier: Modifier = Modifier,
     onAccountDeleted: () -> Unit = {},
     vm: PerfilPageVM = viewModel()
@@ -61,5 +73,5 @@ fun PerfilPage(
 @Preview
 @Composable
 fun PerfilPagePreview() {
-    PerfilPage(userId = 1)
+    PerfilPage(userId = "1")
 }
