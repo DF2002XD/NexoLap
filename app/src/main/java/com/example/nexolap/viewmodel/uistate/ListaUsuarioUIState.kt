@@ -23,6 +23,6 @@ data class UsuarioUIState(
     var id: String,
     var nombre: String,
     var correo: String,
-    var contraseña: String,
+    var contrasenha: String,
     var foto: String? = null
 )

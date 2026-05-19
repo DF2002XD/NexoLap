@@ -107,7 +107,7 @@ class PerfilPageVM : ViewModel() {
                 id = it.id,
                 name = nuevoNombre,
                 email = it.correo,
-                passwd = it.contraseña,
+                passwd = it.contrasenha,
                 color = _colorPerfil.value.toArgb(),
                 photoBase64 = it.foto
             )
@@ -134,7 +134,7 @@ class PerfilPageVM : ViewModel() {
                 id = it.id,
                 name = it.nombre,
                 email = nuevoCorreo,
-                passwd = it.contraseña,
+                passwd = it.contrasenha,
                 color = _colorPerfil.value.toArgb(),
                 photoBase64 = it.foto
             )
@@ -187,7 +187,7 @@ class PerfilPageVM : ViewModel() {
                         id = it.id,
                         name = it.nombre,
                         email = it.correo,
-                        passwd = it.contraseña,
+                        passwd = it.contrasenha,
                         color = _colorPerfil.value.toArgb(),
                         photoBase64 = base64
                     )
