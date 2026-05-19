@@ -1,19 +1,23 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
-import com.example.nexolap.modelo.EspecificacionDTORetroFit
+import com.example.nexolap.modelo.EspecificacionDTO
 
 /**
- * Interfaz de repositorio que define las operaciones de acceso a datos para la entidad [EspecificacionDTORetroFit]
+ * Interfaz de repositorio que define las operaciones de acceso a datos para la entidad [EspecificacionDTO]
  * a través de servicios API REST.
- *
- * Proporciona métodos para la recuperación de especificaciones de forma asíncrona mediante callbacks.
  */
 interface IEspecificacionApiRepo {
-    fun readAll(onSucess: (List<EspecificacionDTORetroFit>) -> Unit, onError: () -> Unit)
+    suspend fun readAll(onSuccess: (List<EspecificacionDTO>) -> Unit, onError: () -> Unit)
 
-    fun read(
+    suspend fun read(
         id: String,
-        onSucess: (especificacionCrado: EspecificacionDTORetroFit?) -> Unit,
+        onSuccess: (especificacionCreado: EspecificacionDTO?) -> Unit,
+        onError: () -> Unit
+    )
+
+    suspend fun create(
+        especificacion: EspecificacionDTO,
+        onSuccess: (id: String) -> Unit,
         onError: () -> Unit
     )
 }

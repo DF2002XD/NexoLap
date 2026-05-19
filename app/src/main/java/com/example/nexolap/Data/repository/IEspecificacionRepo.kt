@@ -1,4 +1,4 @@
-package com.example.nexolap.Data.repository
+package com.example.nexolap.data.repository
 
 import com.example.nexolap.modelo.EspecificacionDTO
 
@@ -7,11 +7,12 @@ import com.example.nexolap.modelo.EspecificacionDTO
  * Define los métodos necesarios para consultar información sobre especificaciones técnicas.
  */
 interface IEspecificacionRepo {
-    fun readAll(onSucess: (List<EspecificacionDTO>) -> Unit, onError: () -> Unit)
+    fun readAll(onSuccess: (List<EspecificacionDTO>) -> Unit, onError: () -> Unit)
 
     fun read(
-        id: Int,
-        onSucess: (especificacionCrado: EspecificacionDTO?) -> Unit,
+        id: String,
+        onSuccess: (especificacionCreado: EspecificacionDTO?) -> Unit,
         onError: () -> Unit
     )
 }
+

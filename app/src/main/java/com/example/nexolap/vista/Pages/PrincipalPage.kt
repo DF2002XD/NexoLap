@@ -1,15 +1,24 @@
 package com.example.nexolap.vista.Pages
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.nexolap.Data.ListaData
-import com.example.nexolap.vista.myComponents.ListHorizontal
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.example.nexolap.viewmodel.vm.PrincipalPageVM
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.nexolap.data.ListaData
+import com.example.nexolap.viewmodel.vm.PrincipalPageVM
+import com.example.nexolap.vista.myComponents.ListHorizontal
 
 
 /**
@@ -29,34 +38,53 @@ fun PrincipalPage(
     vm: PrincipalPageVM = viewModel()
 ) {
     val uiState by vm.uiState.collectAsState()
-    vm.loadData()
 
-    LazyColumn(modifier = modifier) {
-        item {
-            ListHorizontal(
-                listaData = ListaData("Más Vendidos"),
-                ordenadores = uiState.listaOrdenadores,
-                onOrdenadorClick = { ordenadorId ->
-                    onOrdenadorClick(ordenadorId)
-                }
-            )
+    LaunchedEffect(Unit) {
+        vm.loadData()
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        if (uiState.isLoading && uiState.listaOrdenadores.isEmpty()) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
-        item {
-            ListHorizontal(
-                listaData = ListaData("Populares"),
-                ordenadores = uiState.listaOrdenadores,
-                onOrdenadorClick = { ordenadorId ->
-                    onOrdenadorClick(ordenadorId)
-                }
-            )
+
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            item {
+                ListHorizontal(
+                    listaData = ListaData("Más Vendidos"),
+                    ordenadores = uiState.listaOrdenadores.filter { it.categorias.contains("Más Vendidos") },
+                    onOrdenadorClick = { ordenadorId ->
+                        onOrdenadorClick(ordenadorId)
+                    }
+                )
+            }
+            item {
+                ListHorizontal(
+                    listaData = ListaData("Populares"),
+                    ordenadores = uiState.listaOrdenadores.filter { it.categorias.contains("Populares") },
+                    onOrdenadorClick = { ordenadorId ->
+                        onOrdenadorClick(ordenadorId)
+                    }
+                )
+            }
+            item {
+                ListHorizontal(
+                    listaData = ListaData("Nuevos Lanzamientos"),
+                    ordenadores = uiState.listaOrdenadores.filter { it.categorias.contains("Nuevos Lanzamientos") },
+                    onOrdenadorClick = { ordenadorId ->
+                        onOrdenadorClick(ordenadorId)
+                    }
+                )
+            }
         }
-        item {
-            ListHorizontal(
-                listaData = ListaData("Nuevos Lanzamientos"),
-                ordenadores = uiState.listaOrdenadores,
-                onOrdenadorClick = { ordenadorId ->
-                    onOrdenadorClick(ordenadorId)
-                }
+
+        uiState.error?.let { errorMsg ->
+            Text(
+                text = errorMsg,
+                color = Color.Red,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp)
             )
         }
     }

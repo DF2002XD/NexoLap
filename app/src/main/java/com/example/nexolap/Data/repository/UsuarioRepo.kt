@@ -1,19 +1,11 @@
-package com.example.nexolap.Data.repository
+package com.example.nexolap.data.repository
 
 import android.content.Context
 import com.example.nexolap.modelo.UsuarioDTO
+import java.util.UUID
 
 /**
  * Repositorio encargado de la gestión de usuarios y el manejo de sesiones en la aplicación.
- *
- * Esta clase implementa [IUsuarioRepo] y proporciona funcionalidades para realizar operaciones
- * CRUD sobre una lista de usuarios en memoria, además de persistir la sesión del usuario
- * actual utilizando [android.content.SharedPreferences].
- *
- * Implementa el patrón Singleton, por lo que debe inicializarse mediante [init] antes de
- * ser utilizada a través de [getInstance].
- *
- * @property context El contexto de la aplicación utilizado para acceder a SharedPreferences.
  */
 class UsuarioRepo(context: Context) : IUsuarioRepo {
 
@@ -24,16 +16,16 @@ class UsuarioRepo(context: Context) : IUsuarioRepo {
         var usuario = ArrayList(
             listOf(
                 UsuarioDTO(
-                    id = 0,
-                    nombre = "Admin",
-                    correo = "admin@gmail.com",
-                    contraseña = "admin"
+                    id = "0",
+                    name = "Admin",
+                    email = "admin@gmail.com",
+                    passwd = "admin"
                 ),
                 UsuarioDTO(
-                    id = 1,
-                    nombre = "Usuario",
-                    correo = "usuario@gmail.com",
-                    contraseña = "usuario"
+                    id = "1",
+                    name = "Usuario",
+                    email = "usuario@gmail.com",
+                    passwd = "usuario"
                 )
             )
         )
@@ -58,83 +50,84 @@ class UsuarioRepo(context: Context) : IUsuarioRepo {
         }
     }
 
-    override fun readAll(onSucess: (List<UsuarioDTO>) -> Unit, onError: () -> Unit) {
-        onSucess(usuario)
+    override fun readAll(onSuccess: (List<UsuarioDTO>) -> Unit, onError: () -> Unit) {
+        onSuccess(usuario)
     }
 
     override fun read(
-        id: Int,
-        onSucess: (usuarioCreado: UsuarioDTO?) -> Unit,
+        id: String,
+        onSuccess: (usuarioCreado: UsuarioDTO?) -> Unit,
         onError: () -> Unit
     ) {
-        onSucess(usuario.find { it.id == id })
+        onSuccess(usuario.find { it.id == id })
     }
 
     override fun create(
         usuarioDTO: UsuarioDTO,
-        onSucess: () -> Unit,
+        onSuccess: () -> Unit,
         onError: () -> Unit
     ) {
-        val nextId = (usuario.maxOfOrNull { it.id } ?: 0) + 1
+        val nextId = UUID.randomUUID().toString()
         val userWithId = usuarioDTO.copy(id = nextId)
         if (usuario.add(userWithId)) {
-            onSucess()
+            onSuccess()
         } else {
             onError()
         }
     }
 
-    override fun update(usuarioDTO: UsuarioDTO, onSucess: () -> Unit, onError: () -> Unit) {
+    override fun update(usuarioDTO: UsuarioDTO, onSuccess: () -> Unit, onError: () -> Unit) {
         val index = usuario.indexOfFirst { it.id == usuarioDTO.id }
         if (index != -1) {
             usuario[index] = usuarioDTO
-            onSucess()
+            onSuccess()
         } else {
             onError()
         }
     }
 
-    override fun delete(id: Int, onSucess: () -> Unit, onError: () -> Unit) {
+    override fun delete(id: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val removed = usuario.removeIf { it.id == id }
         if (removed) {
-            onSucess()
+            onSuccess()
         } else {
             onError()
         }
     }
 
     override fun loginUser(
-        correo: String,
-        contrasenha: String,
+        email: String,
+        passwd: String,
         keepLogged: Boolean,
-        onSucess: (UsuarioDTO) -> Unit,
+        onSuccess: (UsuarioDTO) -> Unit,
         onError: () -> Unit
     ) {
-        val user = usuario.find { it.correo == correo && it.contraseña == contrasenha }
+        val user = usuario.find { it.email == email && it.passwd == passwd }
         if (user != null) {
             currentUser = user
             if (keepLogged) {
-                editor.putInt("userId", user.id)
+                editor.putString("userId", user.id)
                 editor.apply()
             }
-            onSucess(user)
+            onSuccess(user)
         } else {
             onError()
         }
     }
 
-    override fun loggoutUSer(onSucess: () -> Unit, onError: () -> Unit) {
+    override fun logoutUser(onSuccess: () -> Unit, onError: () -> Unit) {
         currentUser = null
         editor.remove("userId")
         editor.apply()
-        onSucess()
+        onSuccess()
     }
 
     override fun getCurrentUser(): UsuarioDTO? {
-        val userId = sharedPreferences.getInt("userId", -1)
-        if (userId != -1) {
+        val userId = sharedPreferences.getString("userId", null)
+        if (userId != null) {
             return usuario.find { it.id == userId }
         }
         return null
     }
 }
+

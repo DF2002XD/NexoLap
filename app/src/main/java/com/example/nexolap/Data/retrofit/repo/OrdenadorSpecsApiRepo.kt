@@ -1,49 +1,54 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
-import com.example.nexolap.Data.retrofit.network.NetworkModule
-import com.example.nexolap.modelo.OrdenadorSpecsDTORetroFit
+import com.example.nexolap.data.retrofit.network.NetworkModule
+import com.example.nexolap.modelo.OrdenadorSpecsDTO
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * Implementación de la interfaz [IOrdenadorSpecsApiRepo] que gestiona las operaciones de datos
- * para [OrdenadorSpecsDTORetroFit] a través de un servicio de red basado en Retrofit.
- *
- * Esta clase se encarga de realizar llamadas asíncronas a la API utilizando Corrutinas de Kotlin,
- * alternando entre [Dispatchers.IO] para las peticiones de red y [Dispatchers.Main] para
- * ejecutar los callbacks de éxito o error en el hilo principal.
- *
- * @property apiService Servicio de Retrofit utilizado para realizar las peticiones HTTP definido en [NetworkModule].
- * @property gson Instancia de [Gson] utilizada para serializar y deserializar dinámicamente los cuerpos de las respuestas.
+ * para [OrdenadorSpecsDTO] a través de un servicio de red basado en Retrofit.
  */
-class OrdenadorSpecsApiRepo : IOrdenadorSpecsApiRepo {
+class OrdenadorSpecsApiRepo private constructor() : IOrdenadorSpecsApiRepo {
     private val apiService = NetworkModule.apiService
     private val gson = Gson()
 
-    override fun readAll(
-        onSucess: (List<OrdenadorSpecsDTORetroFit>) -> Unit,
+    companion object {
+        @Volatile
+        private var INSTANCE: OrdenadorSpecsApiRepo? = null
+
+        fun getInstance(): OrdenadorSpecsApiRepo {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: OrdenadorSpecsApiRepo().also { INSTANCE = it }
+            }
+        }
+    }
+
+    override suspend fun readAll(
+        onSuccess: (List<OrdenadorSpecsDTO>) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
-                // Asumiendo que el endpoint para ordenadorSpecs es "ordenadorespecs"
                 val response = apiService.getAll("ordenadorespecs")
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val type = object : TypeToken<List<OrdenadorSpecsDTORetroFit>>() {}.type
-                            val ordenadorSpecs: List<OrdenadorSpecsDTORetroFit> = gson.fromJson(json, type)
-                            onSucess(ordenadorSpecs)
-                        } else {
-                            onError()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val type = object : TypeToken<List<OrdenadorSpecsDTO>>() {}.type
+                        val ordenadorSpecs: List<OrdenadorSpecsDTO> = gson.fromJson(json, type)
+                        withContext(Dispatchers.Main) {
+                            onSuccess(ordenadorSpecs)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onError()
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }
@@ -55,26 +60,61 @@ class OrdenadorSpecsApiRepo : IOrdenadorSpecsApiRepo {
         }
     }
 
-    override fun read(
+    override suspend fun read(
         id: String,
-        onSucess: (ordenadorSpecsCrado: OrdenadorSpecsDTORetroFit?) -> Unit,
+        onSuccess: (ordenadorSpecsCrado: OrdenadorSpecsDTO?) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getById("ordenadorespecs", id)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val ordenadorSpecs: OrdenadorSpecsDTORetroFit = gson.fromJson(json,
-                                OrdenadorSpecsDTORetroFit::class.java)
-                            onSucess(ordenadorSpecs)
-                        } else {
-                            onSucess(null)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val ordenadorSpecs: OrdenadorSpecsDTO = gson.fromJson(json,
+                            OrdenadorSpecsDTO::class.java)
+                        withContext(Dispatchers.Main) {
+                            onSuccess(ordenadorSpecs)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onSuccess(null)
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        onError()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onError()
+                }
+            }
+        }
+    }
+
+    override suspend fun create(
+        ordenadorSpecs: OrdenadorSpecsDTO,
+        onSuccess: (id: String) -> Unit,
+        onError: () -> Unit
+    ) {
+        withContext(Dispatchers.IO) {
+            try {
+                // Usamos update (PUT a la carpeta base) para la creación de la relación
+                val response = apiService.update("ordenadorespecs", ordenadorSpecs)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    val json = gson.toJson(body)
+                    val jsonObject = gson.fromJson(json, Map::class.java)
+                    val serverId = jsonObject["id"]?.toString() ?: ""
+
+                    withContext(Dispatchers.Main) {
+                        onSuccess(serverId)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }

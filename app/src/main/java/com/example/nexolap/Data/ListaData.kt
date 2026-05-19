@@ -1,4 +1,4 @@
-package com.example.nexolap.Data
+package com.example.nexolap.data
 
 /**
  * Clase de datos que representa un elemento de una lista, el cual contiene un título.

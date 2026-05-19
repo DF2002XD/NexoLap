@@ -1,48 +1,55 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
-import com.example.nexolap.Data.retrofit.network.NetworkModule
-import com.example.nexolap.modelo.OrdenadorDTORetroFit
+import com.example.nexolap.data.retrofit.network.NetworkModule
+import com.example.nexolap.modelo.OrdenadorDTO
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * Implementación de [IOrdenadorApiRepo] que maneja las operaciones de datos para objetos
- * [OrdenadorDTORetroFit] utilizando un servicio de API basado en Retrofit.
- *
- * Este repositorio gestiona las solicitudes de red asíncronas mediante Coroutines para obtener
- * registros de ordenadores, ya sea de forma individual o múltiple, desde un servidor remoto.
- *
- * @property apiService El servicio de Retrofit utilizado para realizar las peticiones de red.
- * @property gson La instancia de Gson utilizada para la serialización y deserialización de JSON.
+ * [OrdenadorDTO] utilizando un servicio de API basado en Retrofit.
  */
-class OrdenadorApiRepo : IOrdenadorApiRepo {
+class OrdenadorApiRepo private constructor() : IOrdenadorApiRepo {
 
     private val apiService = NetworkModule.apiService
     private val gson = Gson()
 
-    override fun readAll(
-        onSucess: (List<OrdenadorDTORetroFit>) -> Unit,
+    companion object {
+        @Volatile
+        private var INSTANCE: OrdenadorApiRepo? = null
+
+        fun getInstance(): OrdenadorApiRepo {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: OrdenadorApiRepo().also { INSTANCE = it }
+            }
+        }
+    }
+
+    override suspend fun readAll(
+        onSuccess: (List<OrdenadorDTO>) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getAll("ordenador")
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val type = object : TypeToken<List<OrdenadorDTORetroFit>>() {}.type
-                            val ordenadores: List<OrdenadorDTORetroFit> = gson.fromJson(json, type)
-                            onSucess(ordenadores)
-                        } else {
-                            onError()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val type = object : TypeToken<List<OrdenadorDTO>>() {}.type
+                        val ordenadores: List<OrdenadorDTO> = gson.fromJson(json, type)
+                        withContext(Dispatchers.Main) {
+                            onSuccess(ordenadores)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onError()
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }
@@ -54,28 +61,63 @@ class OrdenadorApiRepo : IOrdenadorApiRepo {
         }
     }
 
-    override fun read(
+    override suspend fun read(
         id: String,
-        onSucess: (ordenadorCreado: OrdenadorDTORetroFit?) -> Unit,
+        onSuccess: (ordenadorCreado: OrdenadorDTO?) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getById("ordenador", id)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val ordenador: OrdenadorDTORetroFit = gson.fromJson(
-                                json,
-                                OrdenadorDTORetroFit::class.java
-                            )
-                            onSucess(ordenador)
-                        } else {
-                            onSucess(null)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val ordenador: OrdenadorDTO = gson.fromJson(
+                            json,
+                            OrdenadorDTO::class.java
+                        )
+                        withContext(Dispatchers.Main) {
+                            onSuccess(ordenador)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onSuccess(null)
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        onError()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onError()
+                }
+            }
+        }
+    }
+
+    override suspend fun create(
+        ordenador: OrdenadorDTO,
+        onSuccess: (id: String) -> Unit,
+        onError: () -> Unit
+    ) {
+        withContext(Dispatchers.IO) {
+            try {
+                // Usamos update (PUT a la carpeta base) para la creación de un nuevo recurso
+                val response = apiService.update("ordenador", ordenador)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    val json = gson.toJson(body)
+                    val jsonObject = gson.fromJson(json, Map::class.java)
+                    val serverId = jsonObject["id"]?.toString() ?: ordenador.id
+
+                    withContext(Dispatchers.Main) {
+                        onSuccess(serverId)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }

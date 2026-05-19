@@ -1,4 +1,4 @@
-package com.example.nexolap.Data.repository
+package com.example.nexolap.data.repository
 
 import com.example.nexolap.modelo.OrdenadorDTO
 
@@ -7,7 +7,7 @@ import com.example.nexolap.modelo.OrdenadorDTO
  * Proporciona métodos para la recuperación de datos de forma asíncrona mediante callbacks.
  */
 interface IOrdenadorRepo {
-    fun readAll(onSucess: (List<OrdenadorDTO>) -> Unit, onError: () -> Unit)
+    fun readAll(onSuccess: (List<OrdenadorDTO>) -> Unit, onError: () -> Unit)
 
-    fun read(id: Int, onSucess: (especificacionCreado: OrdenadorDTO?) -> Unit, onError: () -> Unit)
+    fun read(id: String, onSuccess: (ordenadorCreado: OrdenadorDTO?) -> Unit, onError: () -> Unit)
 }

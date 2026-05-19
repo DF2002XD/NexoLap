@@ -1,12 +1,13 @@
 package com.example.nexolap.viewmodel.vm
 
+import android.util.Patterns
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nexolap.Data.retrofit.repo.IUsuarioApiRepo
-import com.example.nexolap.Data.retrofit.repo.UsuarioApiRepo
-import com.example.nexolap.modelo.UsuarioDTORetroFit
+import com.example.nexolap.data.retrofit.repo.IUsuarioApiRepo
+import com.example.nexolap.data.retrofit.repo.UsuarioApiRepo
+import com.example.nexolap.modelo.UsuarioDTO
 import com.example.nexolap.viewmodel.uistate.RegistroUIStateApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,14 +17,6 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel encargado de gestionar la lógica de negocio y el estado de la pantalla de registro de usuarios.
- *
- * Esta clase se comunica con el repositorio [IUsuarioApiRepo] para procesar el alta de nuevos usuarios,
- * gestiona las actualizaciones de los campos del formulario (nombre, correo, contraseñas) y asigna
- * de forma aleatoria un color de perfil de una lista predefinida.
- *
- * @property uiState Flujo de estado ([StateFlow]) que expone el estado actual de la interfaz [RegistroUIStateApi].
- * @property repo Instancia del repositorio utilizada para realizar las operaciones de persistencia de usuarios.
- * @property coloresFondo Lista de colores disponibles para ser asignados aleatoriamente al perfil del usuario.
  */
 class RegistroPageVM : ViewModel() {
     private val _uiState = MutableStateFlow(RegistroUIStateApi())
@@ -41,15 +34,15 @@ class RegistroPageVM : ViewModel() {
     )
 
     fun onNombreChange(nombre: String) {
-        _uiState.update { it.copy(usuario = it.usuario.copy(UsuarioNombre = nombre)) }
+        _uiState.update { it.copy(usuario = it.usuario.copy(nombre = nombre)) }
     }
 
     fun onCorreoChange(correo: String) {
-        _uiState.update { it.copy(usuario = it.usuario.copy(UsuarioCorreo = correo)) }
+        _uiState.update { it.copy(usuario = it.usuario.copy(correo = correo)) }
     }
 
     fun onContrasenhaChange(contra: String) {
-        _uiState.update { it.copy(usuario = it.usuario.copy(UsuarioContrasenha = contra)) }
+        _uiState.update { it.copy(usuario = it.usuario.copy(contrasenha = contra)) }
     }
 
     fun onRepitaContrasenhaChange(contra: String) {
@@ -57,22 +50,39 @@ class RegistroPageVM : ViewModel() {
     }
 
     fun registrarUsuario(onSuccess: () -> Unit) {
-        val usuarioState = _uiState.value.usuario
+        val uiState = _uiState.value
+        val usuarioState = uiState.usuario
+
+        if (usuarioState.contrasenha != uiState.repitaContrasenha) {
+            _uiState.update { it.copy(error = "Las contraseñas no coinciden") }
+            return
+        }
+
+        if (usuarioState.nombre.isBlank() || usuarioState.correo.isBlank() || usuarioState.contrasenha.isBlank()) {
+            _uiState.update { it.copy(error = "Todos los campos son obligatorios") }
+            return
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(usuarioState.correo).matches()) {
+            _uiState.update { it.copy(error = "El formato del correo electrónico no es válido") }
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             val colorAleatorio = coloresFondo.random().toArgb()
-            val dto = UsuarioDTORetroFit(
+            val dto = UsuarioDTO(
                 id = "",
-                name = usuarioState.UsuarioNombre,
-                email = usuarioState.UsuarioCorreo,
-                passwd = usuarioState.UsuarioContrasenha,
+                name = usuarioState.nombre,
+                email = usuarioState.correo,
+                passwd = usuarioState.contrasenha,
                 color = colorAleatorio
             )
 
             repo.create(
                 dto,
-                onSucess = {
+                onSuccess = {
                     _uiState.update { it.copy(isLoading = false, registrationSuccess = true) }
                     onSuccess()
                 },
@@ -92,3 +102,4 @@ class RegistroPageVM : ViewModel() {
         _uiState.value = RegistroUIStateApi()
     }
 }
+

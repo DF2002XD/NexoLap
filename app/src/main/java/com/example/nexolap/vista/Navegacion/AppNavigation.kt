@@ -1,4 +1,4 @@
-package com.example.nexolap.vista.Navegacion
+package com.example.nexolap.vista.navegacion
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -19,24 +20,27 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.nexolap.Data.retrofit.repo.UsuarioApiRepo
+import com.example.nexolap.data.retrofit.repo.UsuarioApiRepo
 import com.example.nexolap.viewmodel.vm.AppNavigationVM
-import com.example.nexolap.vista.Navegacion.Rutas.Busqueda
-import com.example.nexolap.vista.Navegacion.Rutas.Detalles
-import com.example.nexolap.vista.Navegacion.Rutas.Login
-import com.example.nexolap.vista.Navegacion.Rutas.Perfil
-import com.example.nexolap.vista.Navegacion.Rutas.Principal
-import com.example.nexolap.vista.Navegacion.Rutas.Registro
-import com.example.nexolap.vista.Navegacion.Rutas.busqueda
-import com.example.nexolap.vista.Navegacion.Rutas.detalles
-import com.example.nexolap.vista.Navegacion.Rutas.perfil
-import com.example.nexolap.vista.Navegacion.Rutas.principal
-import com.example.nexolap.vista.Pages.LoginPage
-import com.example.nexolap.vista.Pages.PrincipalPage
-import com.example.nexolap.vista.Pages.RegistroPage
-import com.example.nexolap.vista.Pages.PerfilPage
+import com.example.nexolap.vista.Pages.AddOrdenadorPage
 import com.example.nexolap.vista.Pages.BusquedaPage
 import com.example.nexolap.vista.Pages.DetallesPage
+import com.example.nexolap.vista.Pages.LoginPage
+import com.example.nexolap.vista.Pages.PerfilPage
+import com.example.nexolap.vista.Pages.PrincipalPage
+import com.example.nexolap.vista.Pages.RegistroPage
+import com.example.nexolap.vista.navegacion.Rutas.AddOrdenador
+import com.example.nexolap.vista.navegacion.Rutas.Busqueda
+import com.example.nexolap.vista.navegacion.Rutas.Detalles
+import com.example.nexolap.vista.navegacion.Rutas.Login
+import com.example.nexolap.vista.navegacion.Rutas.Perfil
+import com.example.nexolap.vista.navegacion.Rutas.Principal
+import com.example.nexolap.vista.navegacion.Rutas.Registro
+import com.example.nexolap.vista.navegacion.Rutas.addOrdenador
+import com.example.nexolap.vista.navegacion.Rutas.busqueda
+import com.example.nexolap.vista.navegacion.Rutas.detalles
+import com.example.nexolap.vista.navegacion.Rutas.perfil
+import com.example.nexolap.vista.navegacion.Rutas.principal
 import com.example.nexolap.vista.myComponents.ButtomAppBarNav
 import com.example.nexolap.vista.myComponents.TopAppTitle
 
@@ -79,7 +83,7 @@ fun AppNavigation() {
             CircularProgressIndicator()
         }
     } else {
-        val userId = navBackStackEntry?.arguments?.getString("userId") ?: ""
+        val userId = uiState.userId ?: ""
 
         val scaffoldConfig = mapOf(
             Principal to ScaffoldState(
@@ -90,6 +94,8 @@ fun AppNavigation() {
                 showTopBar = true, showBottomBar = true, title = "Perfil"
             ), Detalles to ScaffoldState(
                 showTopBar = true, showBottomBar = false, title = ""
+            ), AddOrdenador to ScaffoldState(
+                showTopBar = true, showBottomBar = true, title = "Añadir Ordenador"
             )
         )
 
@@ -101,21 +107,24 @@ fun AppNavigation() {
             if (currentConfig.showTopBar) {
                 TopAppTitle(
                     title = currentConfig.title,
-                    onBackClick = if (currentRoute?.startsWith("detalles") == true) {
+                    onBackClick = if (currentRoute?.startsWith("detalles") == true || currentRoute == AddOrdenador) {
                         { navController.popBackStack() }
                     } else null,
                     onLogoutClick = {
-                        UsuarioApiRepo.getInstance().loggoutUSer(onSucess = {
+                        vm.logout(onSuccess = {
                             navController.navigate(Login) {
                                 popUpTo(0) { inclusive = true }
                             }
-                        }, onError = {})
+                        })
                     },
                     onProfileDetailsClick = if (currentRoute?.startsWith("perfil") == true) {
                         null
                     } else {
                         { navController.navigate(perfil(userId)) }
-                    })
+                    },
+                    profileColor = uiState.userColor?.let { if (it != 0) Color(it) else Color.Gray } ?: Color.Gray,
+                    profileInitial = uiState.userName ?: "?"
+                )
             }
         }, bottomBar = {
             if (currentConfig.showBottomBar) {
@@ -123,6 +132,7 @@ fun AppNavigation() {
                     currentRoute = currentRoute,
                     onHomeClick = { navController.navigate(principal(userId)) },
                     onSearchClick = { navController.navigate(busqueda(userId)) },
+                    onAddClick = { navController.navigate(AddOrdenador) },
                     onProfileClick = { navController.navigate(perfil(userId)) })
             }
         }) { innerPadding ->
@@ -133,6 +143,7 @@ fun AppNavigation() {
             ) {
                 composable(Login) {
                     LoginPage(onLoginSuccess = { id ->
+                        vm.updateUserInfo()
                         navController.navigate(principal(id)) {
                             popUpTo(Login) { inclusive = true }
                         }
@@ -149,16 +160,17 @@ fun AppNavigation() {
                 composable(
                     route = Principal,
                     arguments = listOf(navArgument("userId") { type = NavType.StringType })
-                ) {
+                ) { _ ->
                     PrincipalPage(
                         onOrdenadorClick = { ordenadorId ->
                             navController.navigate(detalles(ordenadorId))
-                        })
+                        }
+                    )
                 }
                 composable(
                     route = Busqueda,
                     arguments = listOf(navArgument("userId") { type = NavType.StringType })
-                ) {
+                ) { _ ->
                     BusquedaPage(
                         onOrdenadorClick = { ordenadorId ->
                             navController.navigate(detalles(ordenadorId))
@@ -170,11 +182,14 @@ fun AppNavigation() {
                 ) { backStackEntry ->
                     val id = backStackEntry.arguments?.getString("userId") ?: ""
                     PerfilPage(
-                        userId = id, onAccountDeleted = {
+                        userId = id, 
+                        onAccountDeleted = {
                             navController.navigate(Login) {
                                 popUpTo(0) { inclusive = true }
                             }
-                        })
+                        },
+                        onUserUpdated = { vm.updateUserInfo() }
+                    )
                 }
                 composable(
                     route = Detalles,
@@ -183,6 +198,11 @@ fun AppNavigation() {
                     val ordenadorId = backStackEntry.arguments?.getString("ordenadorId") ?: ""
                     DetallesPage(
                         ordenadorId = ordenadorId
+                    )
+                }
+                composable(AddOrdenador) {
+                    AddOrdenadorPage(
+                        onBackClick = { navController.popBackStack() }
                     )
                 }
             }

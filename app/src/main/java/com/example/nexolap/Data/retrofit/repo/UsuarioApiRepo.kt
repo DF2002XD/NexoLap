@@ -1,27 +1,16 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
 import android.content.Context
-import com.example.nexolap.Data.retrofit.network.NetworkModule
-import com.example.nexolap.modelo.UsuarioDTORetroFit
+import com.example.nexolap.data.retrofit.network.NetworkModule
+import com.example.nexolap.modelo.UsuarioDTO
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * Implementación del repositorio de usuarios que gestiona la persistencia de datos mediante
  * una API remota (Retrofit) y una sesión local (SharedPreferences).
- *
- * Esta clase centraliza las operaciones CRUD, el proceso de autenticación (login/logout)
- * y la verificación de sesiones persistentes. Utiliza corrutinas de Kotlin para realizar
- * las operaciones de red en hilos de fondo y devuelve los resultados en el hilo principal.
- *
- * Sigue el patrón Singleton para garantizar una única instancia de acceso a los datos
- * en toda la aplicación.
- *
- * @property context El contexto de la aplicación utilizado para inicializar SharedPreferences.
  */
 class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
 
@@ -35,13 +24,13 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
     companion object {
         var usuario = ArrayList(
             listOf(
-                UsuarioDTORetroFit(
+                UsuarioDTO(
                     id = "0",
                     name = "Admin",
                     email = "admin@gmail.com",
                     passwd = "admin"
                 ),
-                UsuarioDTORetroFit(
+                UsuarioDTO(
                     id = "1",
                     name = "Usuario",
                     email = "usuario@gmail.com",
@@ -49,7 +38,7 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
                 )
             )
         )
-        var currentUser: UsuarioDTORetroFit? = null
+        var currentUser: UsuarioDTO? = null
 
         @Volatile
         private var INSTANCE: UsuarioApiRepo? = null
@@ -70,25 +59,29 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
         }
     }
 
-    override fun readAll(
-        onSucess: (List<UsuarioDTORetroFit>) -> Unit,
+    override suspend fun readAll(
+        onSuccess: (List<UsuarioDTO>) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getAll("user")
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val type = object : TypeToken<List<UsuarioDTORetroFit>>() {}.type
-                            val usuarios: List<UsuarioDTORetroFit> = gson.fromJson(json, type)
-                            onSucess(usuarios)
-                        } else {
-                            onError()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val type = object : TypeToken<List<UsuarioDTO>>() {}.type
+                        val usuarios: List<UsuarioDTO> = gson.fromJson(json, type)
+                        withContext(Dispatchers.Main) {
+                            onSuccess(usuarios)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onError()
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }
@@ -100,34 +93,38 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
         }
     }
 
-    override fun read(
+    override suspend fun read(
         id: String,
-        onSucess: (usuarioCreado: UsuarioDTORetroFit?) -> Unit,
+        onSuccess: (usuarioCreado: UsuarioDTO?) -> Unit,
         onError: () -> Unit
     ) {
         val local = usuario.find { it.id == id }
         if (local != null) {
-            onSucess(local)
+            onSuccess(local)
             return
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getById("user", id)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val usuarioObtenido: UsuarioDTORetroFit = gson.fromJson(
-                                json,
-                                UsuarioDTORetroFit::class.java
-                            )
-                            onSucess(usuarioObtenido)
-                        } else {
-                            onSucess(null)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val usuarioObtenido: UsuarioDTO = gson.fromJson(
+                            json,
+                            UsuarioDTO::class.java
+                        )
+                        withContext(Dispatchers.Main) {
+                            onSuccess(usuarioObtenido)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onSuccess(null)
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }
@@ -139,12 +136,12 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
         }
     }
 
-    override fun create(
-        usuarioDTO: UsuarioDTORetroFit,
-        onSucess: () -> Unit,
+    override suspend fun create(
+        usuarioDTO: UsuarioDTO,
+        onSuccess: () -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val responseRegister = apiService.register(usuarioDTO)
 
@@ -153,14 +150,17 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
 
                     if (usuarioDesdeApi != null) {
                         val serverId = usuarioDesdeApi.id
-                        val usuarioParaCarpeta = usuarioDesdeApi.copy(passwd = usuarioDTO.passwd)
+                        val usuarioParaCarpeta = usuarioDesdeApi.copy(
+                            passwd = usuarioDTO.passwd,
+                            color = usuarioDTO.color
+                        )
 
                         apiService.insert("user", serverId, usuarioParaCarpeta)
 
                         withContext(Dispatchers.Main) {
-                            usuario.add(usuarioDesdeApi)
-                            currentUser = usuarioDesdeApi
-                            onSucess()
+                            usuario.add(usuarioParaCarpeta)
+                            currentUser = usuarioParaCarpeta
+                            onSuccess()
                         }
                     } else {
                         withContext(Dispatchers.Main) { onError() }
@@ -176,9 +176,9 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
         }
     }
 
-    override fun update(
-        usuarioDTO: UsuarioDTORetroFit,
-        onSucess: () -> Unit,
+    override suspend fun update(
+        usuarioDTO: UsuarioDTO,
+        onSuccess: () -> Unit,
         onError: () -> Unit
     ) {
         val index = usuario.indexOfFirst { it.id == usuarioDTO.id }
@@ -192,57 +192,57 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
             currentUser = usuarioDTO
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 apiService.insert("user", usuarioDTO.id, usuarioDTO)
                 withContext(Dispatchers.Main) {
-                    onSucess()
+                    onSuccess()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    onSucess()
+                    onError()
                 }
             }
         }
     }
 
-    override fun delete(id: String, onSucess: () -> Unit, onError: () -> Unit) {
+    override suspend fun delete(id: String, onSuccess: () -> Unit, onError: () -> Unit) {
         usuario.removeAll { it.id == id }
         if (currentUser?.id == id) {
             currentUser = null
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 apiService.delete("user", id)
                 withContext(Dispatchers.Main) {
-                    onSucess()
+                    onSuccess()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    onSucess()
+                    onError()
                 }
             }
         }
     }
 
-    override fun loginUser(
+    override suspend fun loginUser(
         correo: String,
         contrasenha: String,
         keepLogged: Boolean,
-        onSucess: (UsuarioDTORetroFit) -> Unit, onError: () -> Unit
+        onSuccess: (UsuarioDTO) -> Unit, onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val responseAll = apiService.getAll("user")
-                var userEncontrado: UsuarioDTORetroFit? = null
+                var userEncontrado: UsuarioDTO? = null
 
                 if (responseAll.isSuccessful) {
                     val body = responseAll.body()
                     if (body != null) {
                         val json = gson.toJson(body)
-                        val type = object : TypeToken<List<UsuarioDTORetroFit>>() {}.type
-                        val list: List<UsuarioDTORetroFit> = gson.fromJson(json, type)
+                        val type = object : TypeToken<List<UsuarioDTO>>() {}.type
+                        val list: List<UsuarioDTO> = gson.fromJson(json, type)
                         userEncontrado =
                             list.find { it.email.equals(correo.trim(), ignoreCase = true) }
                     }
@@ -250,10 +250,10 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
 
                 if (userEncontrado == null) {
                     withContext(Dispatchers.Main) { onError() }
-                    return@launch
+                    return@withContext
                 }
 
-                val loginReq = UsuarioDTORetroFit(
+                val loginReq = UsuarioDTO(
                     id = "",
                     name = userEncontrado.name,
                     email = correo.trim(),
@@ -262,39 +262,45 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
 
                 val response = apiService.login(loginReq)
 
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val usuarioApi = response.body()
-                        if (usuarioApi != null) {
-                            usuarioApi.color = userEncontrado.color
-                            usuarioApi.keepLogged = keepLogged
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val usuarioApiOriginal = body
+                        val usuarioApi = usuarioApiOriginal.copy(
+                            color = userEncontrado.color,
+                            keepLogged = keepLogged,
+                            passwd = contrasenha.trim() // Preservamos la contraseña para futuras sesiones
+                        )
 
-                            currentUser = usuarioApi
+                        currentUser = usuarioApi
 
-                            val idx = usuario.indexOfFirst { it.id == usuarioApi.id }
-                            if (idx != -1) usuario[idx] = usuarioApi else usuario.add(usuarioApi)
+                        val idx = usuario.indexOfFirst { it.id == usuarioApi.id }
+                        if (idx != -1) usuario[idx] = usuarioApi else usuario.add(usuarioApi)
 
-                            if (keepLogged) {
-                                editor.putString("userId", usuarioApi.id)
-                            } else {
-                                editor.remove("userId")
-                            }
-                            editor.apply()
-
-                            // ACTUALIZACIÓN EN SERVIDOR: Guardamos el objeto completo con keepLogged y color
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    apiService.insert("user", usuarioApi.id, usuarioApi)
-                                } catch (e: Exception) {
-                                    android.util.Log.e("REPO", "Error actualizando JSON tras login")
-                                }
-                            }
-
-                            onSucess(usuarioApi)
+                        if (keepLogged) {
+                            editor.putString("userId", usuarioApi.id)
                         } else {
-                            onError()
+                            editor.remove("userId")
+                        }
+                        editor.apply()
+
+                        // ACTUALIZACIÓN EN SERVIDOR
+                        try {
+                            apiService.insert("user", usuarioApi.id, usuarioApi)
+                        } catch (e: Exception) {
+                            // Error log
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            onSuccess(usuarioApi)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onError()
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }
@@ -304,40 +310,44 @@ class UsuarioApiRepo(context: Context) : IUsuarioApiRepo {
         }
     }
 
-    override fun loggoutUSer(onSucess: () -> Unit, onError: () -> Unit) {
+    override fun logoutUser(onSuccess: () -> Unit, onError: () -> Unit) {
         currentUser = null
         editor.remove("userId")
         editor.apply()
-        onSucess()
+        onSuccess()
     }
 
-    override fun getCurrentUser(): UsuarioDTORetroFit? {
+    override fun getCurrentUser(): UsuarioDTO? {
         return currentUser
     }
 
-    override fun checkStoredSession(onSucess: (UsuarioDTORetroFit) -> Unit, onError: () -> Unit) {
+    override suspend fun checkStoredSession(onSuccess: (UsuarioDTO) -> Unit, onError: () -> Unit) {
         val storedId = sharedPreferences.getString("userId", null)
         if (storedId == null) {
             onError()
             return
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getById("user", storedId)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val user: UsuarioDTORetroFit =
-                                gson.fromJson(json, UsuarioDTORetroFit::class.java)
-                            currentUser = user
-                            onSucess(user)
-                        } else {
-                            onError()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val user: UsuarioDTO =
+                            gson.fromJson(json, UsuarioDTO::class.java)
+                        currentUser = user
+                        withContext(Dispatchers.Main) {
+                            onSuccess(user)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onError()
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }

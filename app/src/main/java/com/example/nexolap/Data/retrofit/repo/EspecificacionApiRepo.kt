@@ -1,50 +1,55 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
-import com.example.nexolap.Data.retrofit.network.NetworkModule
-import com.example.nexolap.modelo.EspecificacionDTORetroFit
+import com.example.nexolap.data.retrofit.network.NetworkModule
+import com.example.nexolap.modelo.EspecificacionDTO
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * Implementación del repositorio para la gestión de datos de especificaciones a través de una API remota.
- *
- * Esta clase implementa la interfaz [IEspecificacionApiRepo] utilizando Retrofit para las peticiones
- * de red y Gson para la serialización y deserialización de objetos. Gestiona las operaciones
- * asíncronas mediante Corrutinas de Kotlin, ejecutando las llamadas en el despachador de E/S (IO)
- * y devolviendo los resultados en el hilo principal (Main).
- *
- * @property apiService Servicio de red para realizar las llamadas a la API, proporcionado por [NetworkModule].
- * @property gson Instancia de Gson utilizada para convertir las respuestas de la API en objetos DTO.
  */
-class EspecificacionApiRepo : IEspecificacionApiRepo {
+class EspecificacionApiRepo private constructor() : IEspecificacionApiRepo {
 
     private val apiService = NetworkModule.apiService
     private val gson = Gson()
 
-    override fun readAll(
-        onSucess: (List<EspecificacionDTORetroFit>) -> Unit,
+    companion object {
+        @Volatile
+        private var INSTANCE: EspecificacionApiRepo? = null
+
+        fun getInstance(): EspecificacionApiRepo {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: EspecificacionApiRepo().also { INSTANCE = it }
+            }
+        }
+    }
+
+    override suspend fun readAll(
+        onSuccess: (List<EspecificacionDTO>) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getAll("especificaciones")
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val type = object : TypeToken<List<EspecificacionDTORetroFit>>() {}.type
-                            val especificaciones: List<EspecificacionDTORetroFit> =
-                                gson.fromJson(json, type)
-                            onSucess(especificaciones)
-                        } else {
-                            onError()
+                val response = apiService.getAll("especificacion")
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val type = object : TypeToken<List<EspecificacionDTO>>() {}.type
+                        val especificaciones: List<EspecificacionDTO> =
+                            gson.fromJson(json, type)
+                        withContext(Dispatchers.Main) {
+                            onSuccess(especificaciones)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onError()
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }
@@ -56,28 +61,63 @@ class EspecificacionApiRepo : IEspecificacionApiRepo {
         }
     }
 
-    override fun read(
+    override suspend fun read(
         id: String,
-        onSucess: (especificacionCrado: EspecificacionDTORetroFit?) -> Unit,
+        onSuccess: (especificacionCrado: EspecificacionDTO?) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getById("especificaciones", id)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            val json = gson.toJson(body)
-                            val especificacion: EspecificacionDTORetroFit = gson.fromJson(
-                                json,
-                                EspecificacionDTORetroFit::class.java
-                            )
-                            onSucess(especificacion)
-                        } else {
-                            onSucess(null)
+                val response = apiService.getById("especificacion", id)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val json = gson.toJson(body)
+                        val especificacion: EspecificacionDTO = gson.fromJson(
+                            json,
+                            EspecificacionDTO::class.java
+                        )
+                        withContext(Dispatchers.Main) {
+                            onSuccess(especificacion)
                         }
                     } else {
+                        withContext(Dispatchers.Main) {
+                            onSuccess(null)
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        onError()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onError()
+                }
+            }
+        }
+    }
+
+    override suspend fun create(
+        especificacion: EspecificacionDTO,
+        onSuccess: (id: String) -> Unit,
+        onError: () -> Unit
+    ) {
+        withContext(Dispatchers.IO) {
+            try {
+                // Usamos update (PUT a la carpeta base) para la creación de un nuevo recurso
+                val response = apiService.update("especificacion", especificacion)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    val json = gson.toJson(body)
+                    val jsonObject = gson.fromJson(json, Map::class.java)
+                    val serverId = jsonObject["id"]?.toString() ?: especificacion.id
+
+                    withContext(Dispatchers.Main) {
+                        onSuccess(serverId)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         onError()
                     }
                 }

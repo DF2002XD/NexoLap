@@ -1,17 +1,4 @@
-package com.example.nexolap.Data
-
-/**
- * Representa la entidad de un ordenador para su visualización en la interfaz de usuario.
- *
- * @property id El identificador único del ordenador.
- * @property imagenPrincipal El identificador del recurso (ID de recurso de Android) para la imagen del ordenador.
- * @property nombre El nombre o modelo del ordenador.
- */
-data class Ordenador(
-    val id: Int,
-    val imagenPrincipal: Int,
-    val nombre: String
-)
+package com.example.nexolap.data
 
 /**
  * Representación de un ordenador tal como se recibe desde una API externa mediante Retrofit.

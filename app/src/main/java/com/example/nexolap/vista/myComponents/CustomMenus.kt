@@ -3,7 +3,6 @@ package com.example.nexolap.vista.myComponents
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
@@ -36,12 +36,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.nexolap.R
+import androidx.compose.ui.unit.sp
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
 import com.exyte.animatednavbar.animation.indendshape.Height
@@ -56,13 +55,17 @@ import com.exyte.animatednavbar.utils.noRippleClickable
  * @param onBackClick Callback opcional para el icono de navegación hacia atrás. Si se proporciona, se muestra el icono de flecha.
  * @param onLogoutClick Callback opcional para la acción de "Cerrar Sesión" dentro del menú desplegable del perfil.
  * @param onProfileDetailsClick Callback opcional para la acción de "Detalles del Perfil" dentro del menú desplegable del perfil.
+ * @param profileColor Color de fondo del avatar del perfil.
+ * @param profileInitial Inicial del nombre del usuario para mostrar en el avatar.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppTitle(
     title: String, onBackClick: (() -> Unit)? = null,
     onLogoutClick: (() -> Unit)? = null,
-    onProfileDetailsClick: (() -> Unit)? = null
+    onProfileDetailsClick: (() -> Unit)? = null,
+    profileColor: Color = MaterialTheme.colorScheme.primary,
+    profileInitial: String = "?"
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -88,15 +91,20 @@ fun TopAppTitle(
             if (onLogoutClick != null || onProfileDetailsClick != null) {
                 Box {
                     IconButton(onClick = { expanded = true }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                            contentDescription = "Perfil",
-                            contentScale = ContentScale.Crop,
+                        Box(
                             modifier = Modifier
                                 .size(40.dp)
                                 .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primary)
-                        )
+                                .background(profileColor),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = profileInitial.take(1).uppercase(),
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                     DropdownMenu(
                         expanded = expanded,
@@ -144,12 +152,14 @@ fun ButtomAppBarNav(
     currentRoute: String? = null,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
+    onAddClick: () -> Unit = {},
     onProfileClick: () -> Unit
 ) {
     val selectedIndex = when {
         currentRoute?.startsWith("principal") == true -> 0
         currentRoute?.startsWith("busqueda") == true -> 1
-        currentRoute?.startsWith("perfil") == true -> 2
+        currentRoute?.startsWith("add_ordenador") == true -> 2
+        currentRoute?.startsWith("perfil") == true -> 3
         else -> 0
     }
 
@@ -175,8 +185,13 @@ fun ButtomAppBarNav(
             onClick = onSearchClick
         )
         ColorButton(
-            imageVector = Icons.Default.AccountCircle,
+            imageVector = Icons.Default.Add,
             isSelected = selectedIndex == 2,
+            onClick = onAddClick
+        )
+        ColorButton(
+            imageVector = Icons.Default.AccountCircle,
+            isSelected = selectedIndex == 3,
             onClick = onProfileClick
         )
     }

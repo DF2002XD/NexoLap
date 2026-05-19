@@ -1,16 +1,16 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
-import com.example.nexolap.modelo.OrdenadorDTORetroFit
+import com.example.nexolap.modelo.OrdenadorDTO
 
 /**
- * Interfaz que define las operaciones de acceso a datos para la entidad [OrdenadorDTORetroFit]
+ * Interfaz que define las operaciones de acceso a datos para la entidad [OrdenadorDTO]
  * a través de una API remota utilizando Retrofit.
- *
- * Proporciona métodos para la obtención masiva e individual de ordenadores mediante
- * funciones de retrollamada (callbacks).
  */
 interface IOrdenadorApiRepo {
-    fun readAll(onSucess: (List<OrdenadorDTORetroFit>) -> Unit, onError: () ->Unit)
+    suspend fun readAll(onSuccess: (List<OrdenadorDTO>) -> Unit, onError: () -> Unit)
 
-    fun read(id: String, onSucess: (especificacionCreado : OrdenadorDTORetroFit?) -> Unit, onError: () ->Unit)
+    suspend fun read(id: String, onSuccess: (ordenadorCreado: OrdenadorDTO?) -> Unit, onError: () -> Unit)
+
+    suspend fun create(ordenador: OrdenadorDTO, onSuccess: (id: String) -> Unit, onError: () -> Unit)
+
 }

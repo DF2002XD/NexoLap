@@ -29,8 +29,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nexolap.Data.Usuario
-import com.example.nexolap.Data.UsuarioApi
+import com.example.nexolap.data.UsuarioApi
 import com.example.nexolap.R
 
 
@@ -171,7 +170,7 @@ fun Registro(
     onRegisterClicked: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
-    val contrasenhasCoinciden = usuario.UsuarioContrasenha == repitaContrasenha
+    val contrasenhasCoinciden = usuario.contrasenha == repitaContrasenha
 
     Column(
         modifier = Modifier
@@ -223,7 +222,7 @@ fun Registro(
                 fontSize = 25.sp
             )
             TextField(
-                value = usuario.UsuarioNombre,
+                value = usuario.nombre,
                 onValueChange = onNombreChange,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
@@ -242,7 +241,7 @@ fun Registro(
                 fontSize = 25.sp
             )
             TextField(
-                value = usuario.UsuarioCorreo,
+                value = usuario.correo,
                 onValueChange = onCorreoChange,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -256,7 +255,7 @@ fun Registro(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CampoContrasenha(
-                valor = usuario.UsuarioContrasenha,
+                valor = usuario.contrasenha,
                 onValorCambiado = onContrasenhaChange,
                 label = stringResource(R.string.contrasenha)
             )
@@ -285,7 +284,7 @@ fun Registro(
         Boton(
             nombre = stringResource(R.string.crear_cuenta),
             onClick = onRegisterClicked,
-            enabled = contrasenhasCoinciden && usuario.UsuarioNombre.isNotBlank() && usuario.UsuarioCorreo.isNotBlank() && usuario.UsuarioContrasenha.isNotBlank()
+            enabled = contrasenhasCoinciden && usuario.nombre.isNotBlank() && usuario.correo.isNotBlank() && usuario.contrasenha.isNotBlank()
         )
         Spacer(modifier = Modifier.height(40.dp))
     }

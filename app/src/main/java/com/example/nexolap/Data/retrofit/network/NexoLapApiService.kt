@@ -1,6 +1,6 @@
-package com.example.nexolap.Data.retrofit.network
+package com.example.nexolap.data.retrofit.network
 
-import com.example.nexolap.modelo.UsuarioDTORetroFit
+import com.example.nexolap.modelo.UsuarioDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -11,16 +11,13 @@ import retrofit2.http.Path
 
 /**
  * Interfaz de servicio Retrofit que define los puntos de conexión (endpoints) de la API para NexoLap.
- *
- * Esta interfaz gestiona la autenticación de usuarios y proporciona operaciones CRUD genéricas
- * para interactuar con diferentes recursos de datos organizados por carpetas.
  */
 interface NexoLapApiService {
     @POST("auth/login")
-    suspend fun login(@Body usuario: UsuarioDTORetroFit): Response<UsuarioDTORetroFit>
+    suspend fun login(@Body usuario: UsuarioDTO): Response<UsuarioDTO>
 
     @POST("auth/register")
-    suspend fun register(@Body usuario: UsuarioDTORetroFit): Response<UsuarioDTORetroFit>
+    suspend fun register(@Body usuario: UsuarioDTO): Response<UsuarioDTO>
 
     @GET("json/{carpeta}")
     suspend fun getAll(@Path("carpeta") carpeta: String): Response<List<Any>>
@@ -56,4 +53,5 @@ interface NexoLapApiService {
         @Path("carpeta") carpeta: String,
         @Path("id") id: String
     ): Response<Unit>
+
 }

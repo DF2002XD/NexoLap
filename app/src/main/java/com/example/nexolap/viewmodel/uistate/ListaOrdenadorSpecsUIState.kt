@@ -5,16 +5,19 @@ package com.example.nexolap.viewmodel.uistate
  *
  * @property listaOrdenadorSpecs Una lista de objetos [OrdenadorSpecsUIState] que contienen los identificadores
  * de la relación entre ordenadores y sus especificaciones técnicas.
+ * @property isLoading Indica si los datos se están cargando actualmente.
+ * @property error Mensaje de error en caso de fallo en la carga.
  */
-data class ListaOrdenadorSpecsUIState(var listaOrdenadorSpecs: List<OrdenadorSpecsUIState> = ArrayList())
-data class OrdenadorSpecsUIState( var id_Ordenador : String, var id_Especificacion : String)
+data class ListaOrdenadorSpecsUIState(
+    val listaOrdenadorSpecs: List<OrdenadorSpecsUIState> = emptyList(),
+    val isLoading: Boolean = false,
+    val error: String? = null
+)
 
 /**
- * Representa el estado de la interfaz de usuario para una lista de relaciones entre ordenadores y especificaciones.
+ * Representa la relación entre un ordenador y una especificación técnica.
  *
- * Esta versión utiliza identificadores de tipo numérico ([Int]) a través del modelo [OrdenadorSpecsUIState1].
- *
- * @property listaOrdenadorSpecs Lista que contiene las asociaciones entre los identificadores de ordenadores y especificaciones.
+ * @property id_Ordenador Identificador único del ordenador.
+ * @property id_Especificacion Identificador único de la especificación técnica.
  */
-data class  ListaOrdenadorSpecsUIState1(var listaOrdenadorSpecs: List<OrdenadorSpecsUIState1> = ArrayList())
-data class OrdenadorSpecsUIState1(val id_Ordenador: Int, val id_Especificacion: Int)
+data class OrdenadorSpecsUIState(var id_Ordenador: String, var id_Especificacion: String)

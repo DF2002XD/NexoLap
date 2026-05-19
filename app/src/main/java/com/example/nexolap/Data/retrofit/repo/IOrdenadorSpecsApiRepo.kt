@@ -1,19 +1,23 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
-import com.example.nexolap.modelo.OrdenadorSpecsDTORetroFit
+import com.example.nexolap.modelo.OrdenadorSpecsDTO
 
 /**
  * Interfaz de repositorio que define las operaciones de acceso a datos para las especificaciones
  * de ordenadores (OrdenadorSpecs) a través de una API de Retrofit.
- *
- * Proporciona métodos para la recuperación remota de información técnica de equipos.
  */
 interface IOrdenadorSpecsApiRepo {
-    fun readAll(onSucess: (List<OrdenadorSpecsDTORetroFit>) -> Unit, onError: () -> Unit)
+    suspend fun readAll(onSuccess: (List<OrdenadorSpecsDTO>) -> Unit, onError: () -> Unit)
 
-    fun read(
+    suspend fun read(
         id: String,
-        onSucess: (ordenadorSpecsCrado: OrdenadorSpecsDTORetroFit?) -> Unit,
+        onSuccess: (ordenadorSpecsCreado: OrdenadorSpecsDTO?) -> Unit,
+        onError: () -> Unit
+    )
+
+    suspend fun create(
+        ordenadorSpecs: OrdenadorSpecsDTO,
+        onSuccess: (id: String) -> Unit,
         onError: () -> Unit
     )
 }

@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.nexolap.Data.ListaData
-import com.example.nexolap.Data.OrdenadorRetrofit
+import com.example.nexolap.data.ListaData
+import com.example.nexolap.modelo.OrdenadorDTO
 import com.example.nexolap.viewmodel.uistate.OrdenadorUIState
 
 /**
@@ -30,7 +30,7 @@ fun ListVertical(
     LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
         items(ordenadores) { producto ->
             TarjetaHorizontal(
-                ordenador = OrdenadorRetrofit(
+                ordenador = OrdenadorDTO(
                     producto.id,
                     producto.nombre,
                     producto.imagenPrincipal
@@ -63,7 +63,7 @@ fun ListHorizontal(
         LazyRow {
             items(ordenadores.take(10)) { producto ->
                 TarjetaVertical(
-                    ordenador = OrdenadorRetrofit(
+                    ordenador = OrdenadorDTO(
                         producto.id,
                         producto.nombre,
                         producto.imagenPrincipal

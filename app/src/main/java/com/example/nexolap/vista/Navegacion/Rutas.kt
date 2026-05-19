@@ -1,4 +1,4 @@
-package com.example.nexolap.vista.Navegacion
+package com.example.nexolap.vista.navegacion
 
 /**
  * Objeto que define las rutas de navegación de la aplicación y proporciona funciones auxiliares
@@ -16,10 +16,12 @@ object Rutas {
     const val Busqueda = "busqueda/{userId}"
     const val Perfil = "perfil/{userId}"
     const val Detalles = "detalles/{ordenadorId}"
+    const val AddOrdenador = "add_ordenador"
 
     // Funciones auxiliares para navegar (para el navController.navigate)
     fun principal(id: String) = "principal/$id"
     fun busqueda(id: String) = "busqueda/$id"
     fun perfil(id: String) = "perfil/$id"
     fun detalles(id: String) = "detalles/$id"
+    fun addOrdenador() = AddOrdenador
 }

@@ -1,4 +1,4 @@
-package com.example.nexolap.Data.retrofit.network
+package com.example.nexolap.data.retrofit.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,7 +16,9 @@ import retrofit2.converter.gson.GsonConverterFactory
  * La URL base está configurada para apuntar al servidor de desarrollo local (10.0.2.2).
  */
 object NetworkModule {
-    private const val BASE_URL = "http://10.0.2.2:5131/"
+    const val BASE_URL = "http://10.0.2.2:5131/"
+
+    fun getImageUrl(id: String): String = "${BASE_URL}images/$id"
 
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

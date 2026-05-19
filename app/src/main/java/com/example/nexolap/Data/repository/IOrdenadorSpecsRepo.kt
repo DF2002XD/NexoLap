@@ -1,4 +1,4 @@
-package com.example.nexolap.Data.repository
+package com.example.nexolap.data.repository
 
 import com.example.nexolap.modelo.OrdenadorSpecsDTO
 
@@ -6,11 +6,11 @@ import com.example.nexolap.modelo.OrdenadorSpecsDTO
  * Repositorio encargado de gestionar las operaciones de acceso a datos para las especificaciones de ordenadores.
  */
 interface IOrdenadorSpecsRepo {
-    fun readAll(onSucess: (List<OrdenadorSpecsDTO>) -> Unit, onError: () -> Unit)
+    fun readAll(onSuccess: (List<OrdenadorSpecsDTO>) -> Unit, onError: () -> Unit)
 
     fun read(
-        id: Int,
-        onSucess: (ordenadorSpecsCrado: OrdenadorSpecsDTO?) -> Unit,
+        id: String,
+        onSuccess: (ordenadorSpecsCreado: OrdenadorSpecsDTO?) -> Unit,
         onError: () -> Unit
     )
 }

@@ -2,7 +2,8 @@ package com.example.nexolap.viewmodel.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nexolap.Data.retrofit.repo.IUsuarioApiRepo
+import com.example.nexolap.data.retrofit.repo.IUsuarioApiRepo
+import com.example.nexolap.data.retrofit.repo.UsuarioApiRepo
 import com.example.nexolap.viewmodel.uistate.AppNavigationUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,23 +21,28 @@ import kotlinx.coroutines.launch
  * @property uiState Un [StateFlow] que emite [AppNavigationUIState], representando el estado
  * actual de la navegación y la verificación de la sesión.
  */
-class AppNavigationVM() : ViewModel() {
+class AppNavigationVM(
+
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppNavigationUIState(isCheckUserSession = true))
     val uiState: StateFlow<AppNavigationUIState> = _uiState.asStateFlow()
 
     private val userRepo: IUsuarioApiRepo =
-        com.example.nexolap.Data.retrofit.repo.UsuarioApiRepo.getInstance()
+       UsuarioApiRepo.getInstance()
 
     fun checkUserSession() {
         viewModelScope.launch {
             userRepo.checkStoredSession(
-                onSucess = { user ->
+                onSuccess = { user ->
                     _uiState.update {
                         it.copy(
                             isCheckUserSession = false,
                             isUserLoggedIn = true,
-                            initialRoute = "principal/${user.id}"
+                            initialRoute = "principal/${user.id}",
+                            userId = user.id,
+                            userName = user.name,
+                            userColor = user.color
                         )
                     }
                 },
@@ -53,13 +59,26 @@ class AppNavigationVM() : ViewModel() {
         }
     }
 
-//    fun logout(onSuccess: () -> Unit) {
-//        userRepo.loggoutUSer(
-//            onSucess = {
-//                _uiState.update { it.copy(isUserLoggedIn = false) }
-//                onSuccess()
-//            },
-//            onError = {}
-//        )
-//    }
+    fun logout(onSuccess: () -> Unit) {
+        userRepo.logoutUser(
+            onSuccess = {
+                _uiState.update { it.copy(isUserLoggedIn = false, userId = null, userName = null, userColor = null) }
+                onSuccess()
+            },
+            onError = {}
+        )
+    }
+
+    fun updateUserInfo() {
+        val user = userRepo.getCurrentUser()
+        if (user != null) {
+            _uiState.update {
+                it.copy(
+                    userId = user.id,
+                    userName = user.name,
+                    userColor = user.color
+                )
+            }
+        }
+    }
 }

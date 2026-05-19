@@ -1,24 +1,6 @@
 package com.example.nexolap.viewmodel.uistate
 
-import com.example.nexolap.Data.Usuario
-import com.example.nexolap.Data.UsuarioApi
-
-/**
- * Representa o estado da interface de usuário (UI) para a tela de registro.
- *
- * @property usuario O objeto contendo as informações do usuário a ser cadastrado.
- * @property repitaContrasenha Campo para confirmação da senha digitada pelo usuário.
- * @property isLoading Indica se um processo de registro está em andamento (ex: chamada de API).
- * @property registrationSuccess Indica se o processo de registro foi concluído com sucesso.
- * @property error Armazena uma mensagem de erro caso ocorra uma falha durante o registro.
- */
-data class RegistroUIState(
-    val usuario: Usuario = Usuario(0, "", "", "", false, 0),
-    val repitaContrasenha: String = "",
-    val isLoading: Boolean = false,
-    val registrationSuccess: Boolean = false,
-    val error: String? = null
-)
+import com.example.nexolap.data.UsuarioApi
 
 /**
  * Representa el estado de la interfaz de usuario (UI) durante el proceso de registro

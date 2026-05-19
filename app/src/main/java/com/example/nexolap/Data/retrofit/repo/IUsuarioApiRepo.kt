@@ -1,37 +1,34 @@
-package com.example.nexolap.Data.retrofit.repo
+package com.example.nexolap.data.retrofit.repo
 
-import com.example.nexolap.modelo.UsuarioDTORetroFit
+import com.example.nexolap.modelo.UsuarioDTO
 
 /**
  * Interfaz que define el repositorio de operaciones para la gestión de usuarios mediante una API.
- *
- * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Borrar),
- * así como la gestión de autenticación y persistencia de sesiones de usuario.
  */
 interface IUsuarioApiRepo {
-    fun readAll(onSucess: (List<UsuarioDTORetroFit>) -> Unit, onError: () -> Unit)
-    fun read(
+    suspend fun readAll(onSuccess: (List<UsuarioDTO>) -> Unit, onError: () -> Unit)
+    suspend fun read(
         id: String,
-        onSucess: (usuarioCreado: UsuarioDTORetroFit?) -> Unit,
+        onSuccess: (usuarioCreado: UsuarioDTO?) -> Unit,
         onError: () -> Unit
     )
 
-    fun create(usuarioDTO: UsuarioDTORetroFit, onSucess: () -> Unit, onError: () -> Unit)
+    suspend fun create(usuarioDTO: UsuarioDTO, onSuccess: () -> Unit, onError: () -> Unit)
 
-    fun update(usuarioDTO: UsuarioDTORetroFit, onSucess: () -> Unit, onError: () -> Unit)
-    fun delete(id: String, onSucess: () -> Unit, onError: () -> Unit)
+    suspend fun update(usuarioDTO: UsuarioDTO, onSuccess: () -> Unit, onError: () -> Unit)
+    suspend fun delete(id: String, onSuccess: () -> Unit, onError: () -> Unit)
 
-    fun loginUser(
+    suspend fun loginUser(
         correo: String,
         contrasenha: String,
         keepLogged: Boolean,
-        onSucess: (UsuarioDTORetroFit) -> Unit,
+        onSuccess: (UsuarioDTO) -> Unit,
         onError: () -> Unit
     )
 
-    fun loggoutUSer(onSucess: () -> Unit, onError: () -> Unit)
+    fun logoutUser(onSuccess: () -> Unit, onError: () -> Unit)
 
-    fun getCurrentUser(): UsuarioDTORetroFit?
+    fun getCurrentUser(): UsuarioDTO?
 
-    fun checkStoredSession(onSucess: (UsuarioDTORetroFit) -> Unit, onError: () -> Unit)
+    suspend fun checkStoredSession(onSuccess: (UsuarioDTO) -> Unit, onError: () -> Unit)
 }

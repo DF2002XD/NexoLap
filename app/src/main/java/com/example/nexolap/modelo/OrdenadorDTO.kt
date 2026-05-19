@@ -1,20 +1,17 @@
 package com.example.nexolap.modelo
 
 /**
- * Objeto de Transferencia de Datos (DTO) que representa la información básica de un ordenador.
+ * Modelo de datos unificado para los ordenadores.
+ * Utiliza la estructura requerida por la API de Retrofit.
  *
- * @property id El identificador único del ordenador.
+ * @property id El identificador único del ordenador (en formato String para compatibilidad con la API).
  * @property nombre El nombre o modelo del ordenador.
- * @property imagenPrincipal El identificador del recurso (ID) de la imagen principal asociada al ordenador.
+ * @property imagenPrincipal La URL o identificador de la imagen principal del ordenador.
+ * @property categorias Lista de categorías a las que pertenece el ordenador (ej: "Populares", "Más Vendidos").
  */
-data class OrdenadorDTO(var id: Int, var nombre: String, var imagenPrincipal: Int)
-
-/**
- * Objeto de Transferencia de Datos (DTO) utilizado para representar un ordenador
- * en las peticiones y respuestas de la API a través de Retrofit.
- *
- * @property id El identificador único del ordenador en formato String.
- * @property nombre El nombre o modelo del ordenador.
- * @property imagenPrincipal La URL o ruta de la imagen principal del ordenador.
- */
-data class OrdenadorDTORetroFit(var id: String, var nombre: String, var imagenPrincipal: String)
+data class OrdenadorDTO(
+    val id: String,
+    val nombre: String,
+    val imagenPrincipal: String,
+    val categorias: List<String> = emptyList()
+)
